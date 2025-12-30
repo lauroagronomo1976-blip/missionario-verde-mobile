@@ -1,7 +1,5 @@
 // ===== MAPA =====
-const map = L.map("map").setView([-15.7801, -47.9292], 5); // Brasil centro
-
-let camadaAtual = "rua";
+const map = L.map("map").setView([-15.7801, -47.9292], 5);
 
 // Camadas
 const camadaRua = L.tileLayer(
@@ -14,34 +12,69 @@ const camadaSatelite = L.tileLayer(
   { maxZoom: 19 }
 );
 
-// Botão Camadas
-document.getElementById("btnCamadas").addEventListener("click", () => {
-  if (camadaAtual === "rua") {
-    map.removeLayer(camadaRua);
-    map.addLayer(camadaSatelite);
-    camadaAtual = "satelite";
-  } else {
-    map.removeLayer(camadaSatelite);
-    map.addLayer(camadaRua);
-    camadaAtual = "rua";
-  }
-});
+let usandoSatelite = false;
 
-// Botão GPS
-document.getElementById("btnGps").addEventListener("click", () => {
-  if (!navigator.geolocation) {
-    alert("GPS não disponível");
-    return;
-  }
+// ===== BOTÃO CAMADAS (DENTRO DO MAPA) =====
+const controleCamadas = L.control({ position: "topleft" });
 
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+controleCamadas.onAdd = function () {
+  const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+  div.innerHTML = "🗺️";
+  div.title = "Alternar camadas";
 
-      map.setView([lat, lng], 17);
-      L.marker([lat, lng]).addTo(map);
-    },
-    () => alert("Erro ao obter localização")
-  );
-});
+  div.onclick = function (e) {
+    L.DomEvent.stop(e);
+    if (usandoSatelite) {
+      map.removeLayer(camadaSatelite);
+      map.addLayer(camadaRua);
+      usandoSatelite = false;
+    } else {
+      map.removeLayer(camadaRua);
+      map.addLayer(camadaSatelite);
+      usandoSatelite = true;
+    }
+  };
+
+  return div;
+};
+
+controleCamadas.addTo(map);
+
+// ===== BOTÃO GPS (LOGO ABAIXO) =====
+const controleGPS = L.control({ position: "topleft" });
+
+controleGPS.onAdd = function () {
+  const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+  div.innerHTML = "🎯";
+  div.title = "Minha localização";
+
+  div.onclick = function (e) {
+    L.DomEvent.stop(e);
+
+    if (!navigator.geolocation) {
+      alert("GPS não disponível");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        map.setView([lat, lng], 18, { animate: true });
+
+        L.marker([lat, lng]).addTo(map);
+      },
+      () => alert("Erro ao obter localização"),
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000
+      }
+    );
+  };
+
+  return div;
+};
+
+controleGPS.addTo(map);
