@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Missionário Verde</title>
+  <meta charset="UTF-8" />
+  <title>Missionário Verde - Mobile 1.0</title>
 
-  <!-- ESSENCIAL PARA MOBILE -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ESTILO -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- LEAFLET (MAPA) -->
+  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -19,59 +15,52 @@
 
 <body>
 
-  <header class="topo">
+  <header class="header">
     <h1>Missionário Verde</h1>
   </header>
 
-  <main class="conteudo">
+  <section class="container-missao">
+    <h2 class="titulo-verde">Nova Missão</h2>
 
-    <section class="bloco">
-      <h2>Nova Missão</h2>
+    <div class="linha">
+      <input id="safra" type="text" placeholder="Safra (ex: 2024/25)">
+      <input id="fazenda" type="text" placeholder="Fazenda">
+    </div>
 
-      <label>Safra</label>
-      <input type="text" placeholder="Ex: 2024/2025">
+    <div class="linha">
+      <input id="talhao" type="text" placeholder="Talhão">
+    </div>
+  </section>
 
-      <label>Fazenda</label>
-      <input type="text">
+  <section class="container-mapa">
+    <div id="map"></div>
 
-      <label>Talhão</label>
-      <input type="text">
-    </section>
+    <div class="map-controls">
+      <button id="btnCamadas">🗺️ Camadas</button>
+      <button id="btnGps">🎯 Minha localização</button>
+    </div>
+  </section>
 
-    <section class="bloco">
-      <h2>Mapa</h2>
-      <div id="map"></div>
-    </section>
+  <section class="container-resumo">
+    <h2 class="titulo-verde">Resumo da Missão</h2>
+    <div id="listaPontos">
+      <p class="vazio">Nenhum ponto lançado</p>
+    </div>
 
-    <section class="bloco">
-      <h2>Resumo da Missão</h2>
-      <!-- RESUMO GERAL -->
-<section class="bloco">
-  <h3 class="titulo-verde">Resumo Geral</h3>
+    <div class="acoes">
+      <button class="btn-editar">Editar ponto</button>
+      <button class="btn-excluir">Excluir ponto</button>
+    </div>
 
-  <div class="linha-resumo">
-    <div><strong>Pontos:</strong> <span id="totalPontos">0</span></div>
-    <div><strong>Área:</strong> <span id="areaTotal">--</span></div>
-  </div>
-</section>
+    <h2 class="titulo-verde">Resumo Geral</h2>
+    <div id="resumoGeral">
+      <p class="vazio">Sem dados</p>
+    </div>
+  </section>
 
-<!-- AÇÕES -->
-<section class="bloco">
-  <button id="btnCamadas"> Camadas</button>
-<button id="btnGps" class="btn-gps"> Minha localização</button>
-</section>
-
-      <div id="resumo"></div>
-    </section>
-
-  </main>
-
-  <!-- SCRIPT -->
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 
 </body>
 </html>
-
-
-
