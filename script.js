@@ -15,7 +15,7 @@ const camadaSatelite = L.tileLayer(
 let usandoSatelite = false;
 
 // ===== BOTÃO CAMADAS (DENTRO DO MAPA) =====
-const controleCamadas = L.control({ position: "topleft" });
+const controleCamadas = L.control({ position: "topright" });
 
 controleCamadas.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
@@ -41,7 +41,7 @@ controleCamadas.onAdd = function () {
 controleCamadas.addTo(map);
 
 // ===== BOTÃO GPS (LOGO ABAIXO) =====
-const controleGPS = L.control({ position: "topleft" });
+const controleGPS = L.control({ position: "topright" });
 
 controleGPS.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
@@ -78,3 +78,4 @@ controleGPS.onAdd = function () {
 };
 
 controleGPS.addTo(map);
+
