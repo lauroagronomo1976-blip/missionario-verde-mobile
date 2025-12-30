@@ -105,5 +105,12 @@ button.sec { background: #777; }
 .container-missao select {
   height: 32px;
 }
+/* ====== CAMPOS SUPERIORES COMPACTOS (MOBILE) ====== */
+#safra,
+#fazenda,
+#talhao {
+  width: 50%;
+}
+
 
 
