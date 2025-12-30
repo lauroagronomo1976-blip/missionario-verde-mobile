@@ -1,3 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+}
 * { box-sizing: border-box; }
 
 body {
@@ -75,3 +91,4 @@ button.sec { background: #777; }
 }
 
 #resumoPontos { padding-left: 16px; font-size: 12px; }
+
