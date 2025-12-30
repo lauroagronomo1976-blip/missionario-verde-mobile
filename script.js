@@ -110,3 +110,24 @@ window.onload = function () {
   }
 
 };
+document.getElementById("btnGps").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("GPS não disponível neste aparelho.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      map.setView([lat, lng], 17);
+
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup("📍 Localização atual")
+        .openPopup();
+    },
+    () => alert("Não foi possível obter a localização.")
+  );
+});
+
