@@ -1,139 +1,86 @@
-// ===== MAPA =====
-let circuloGPS = null;
-const map = L.map("map").setView([-15.7801, -47.9292], 5);
-maxZoom: 19,
-  minZoom: 5
-});
+// ===== CAMADAS =====
 
-// Camadas
+// Mapa de ruas (OpenStreetMap)
 const camadaRua = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
-    maxZoom: 19
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
   }
 );
-).addTo(map);
 
+// Mapa Satélite (Esri)
 const camadaSatelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   {
     maxZoom: 19,
-    maxNativeZoom: 17
+    maxNativeZoom: 17,
+    attribution: "Esri"
   }
 );
 
-let usandoSatelite = false;
+// ===== MAPA =====
+const map = L.map("map", {
+  center: [-15.5, -55.5], // Brasil
+  zoom: 5,
+  layers: [camadaRua]
+});
 
-// ===== BOTÃO CAMADAS (DENTRO DO MAPA) =====
-const controleCamadas = L.control({ position: "topright" });
+// Controle de camadas
+L.control.layers(
+  {
+    "Rua": camadaRua,
+    "Satélite": camadaSatelite
+  },
+  {},
+  { position: "topright" }
+).addTo(map);
 
-controleCamadas.onAdd = function () {
-  const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-  div.style.width = "48px";
-div.style.height = "48px";
-div.style.lineHeight = "48px";
-div.style.fontSize = "22px";
-div.style.textAlign = "center";
-  div.innerHTML = "🗺️";
-  div.title = "Alternar camadas";
+// ===== BOTÃO GPS =====
+const botaoGPS = L.control({ position: "topright" });
 
-  div.onclick = function (e) {
-    L.DomEvent.stop(e);
-    if (usandoSatelite) {
-      map.removeLayer(camadaSatelite);
-      map.addLayer(camadaRua);
-      usandoSatelite = false;
-    } else {
-      map.removeLayer(camadaRua);
-      map.addLayer(camadaSatelite);
-      usandoSatelite = true;
-    }
+botaoGPS.onAdd = function () {
+  const div = L.DomUtil.create("div", "leaflet-control leaflet-bar");
+  div.innerHTML = "📍";
+  div.style.width = "36px";
+  div.style.height = "36px";
+  div.style.display = "flex";
+  div.style.alignItems = "center";
+  div.style.justifyContent = "center";
+  div.style.cursor = "pointer";
+  div.style.background = "#ffffff";
+  div.title = "Minha localização";
+
+  div.onclick = function () {
+    map.locate({ enableHighAccuracy: true });
   };
 
   return div;
 };
 
-controleCamadas.addTo(map);
+botaoGPS.addTo(map);
 
-// ===== BOTÃO GPS (BOLINHA AZUL) =====
-const controleGPS = L.control({ position: "topright" });
+// ===== EVENTOS GPS =====
+let marcadorLocalizacao = null;
 
-controleGPS.onAdd = function () {
-  const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-
-  div.style.width = "48px";
-  div.style.height = "48px";
-  div.style.lineHeight = "48px";
-  div.style.fontSize = "22px";
-  div.style.textAlign = "center";
-
-  div.innerHTML = "🎯";
-  div.title = "Minha localização";
-
-  div.onclick = function (e) {
-    L.DomEvent.stop(e);
-
-   const zoomGPS = map.hasLayer(camadaSatelite) ? 17 : 18;
-
-map.locate()
-  enableHighAccuracy: true,
-  watch: false
-});
-
-  return div;
-};
-
-controleGPS.addTo(map);
-
-// ===== EVENTO: LOCALIZAÇÃO ENCONTRADA =====
 map.on("locationfound", function (e) {
   const latlng = e.latlng;
 
-  // Define zoom seguro dependendo da camada
-  let zoomSeguro;
+  const zoomSeguro = map.hasLayer(camadaSatelite) ? 17 : 18;
+  map.flyTo(latlng, zoomSeguro);
 
-  if (map.hasLayer(camadaSatelite)) {
-    zoomSeguro = 17; // NUNCA 18 no satélite
-  } else {
-    zoomSeguro = 18; // Rua pode
+  if (marcadorLocalizacao) {
+    map.removeLayer(marcadorLocalizacao);
   }
 
-  map.flyTo(latlng, zoomSeguro, {
-    animate: true,
-    duration: 1.2
-  });
-
-  // Bolinha azul (localização)
-  if (window.localizacaoAtual) {
-    map.removeLayer(window.localizacaoAtual);
-  }
-
-  window.localizacaoAtual = L.circleMarker(latlng, {
+  marcadorLocalizacao = L.circleMarker(latlng, {
     radius: 6,
     color: "#1e90ff",
     fillColor: "#1e90ff",
     fillOpacity: 0.9
   }).addTo(map);
 });
-  // Remove localização anterior
-  if (circuloGPS) {
-    map.removeLayer(circuloGPS);
-  }
 
-  // Bolinha azul (estilo GPS)
-  circuloGPS = L.circleMarker(latlng, {
-    radius: 8,
-    fillColor: "#007bff",
-    color: "#007bff",
-    weight: 2,
-    opacity: 1,
-    fillOpacity: 0.7
-  }).addTo(map);
-});
-
-// ===== EVENTO: ERRO DE GPS =====
 map.on("locationerror", function () {
-  alert("Não foi possível obter a localização GPS.");
+  alert("Não foi possível acessar o GPS.");
 });
-
-
