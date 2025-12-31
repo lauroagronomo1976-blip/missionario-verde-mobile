@@ -1,36 +1,66 @@
-// MAPA
-const map = L.map("map").setView([-15.78, -47.93], 14);
+// ================= MAPA =================
+const map = L.map("map", {
+  zoomControl: true
+}).setView([-15.78, -47.93], 13);
 
-// CAMADAS
-const rua = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19
-}).addTo(map);
+// ================= CAMADAS BASE =================
 
-const satelite = L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  { maxZoom: 19 }
+// Mapa de Rua (OpenStreetMap)
+const rua = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
+  }
 );
 
-L.control.layers(
-  { Rua: rua, Satélite: satelite },
-  null,
-  { position: "topright" }
-).addTo(map);
+// Satélite (Esri)
+const satelite = L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    maxZoom: 19,
+    attribution: "Esri"
+  }
+);
 
-// BOTÃO MIRA (GPS) – estilo Fields
+// >>> IMPORTANTE: adiciona uma camada inicial
+rua.addTo(map);
+
+// ================= CONTROLE DE CAMADAS =================
+const baseMaps = {
+  "Rua": rua,
+  "Satélite": satelite
+};
+
+L.control.layers(baseMaps, null, {
+  position: "topright",
+  collapsed: true
+}).addTo(map);
+
+// ================= BOTÃO MIRA (GPS) =================
 const gpsControl = L.control({ position: "topright" });
 
 gpsControl.onAdd = function () {
-  const div = L.DomUtil.create("div", "gps-button");
+  const div = L.DomUtil.create("div", "gps-button leaflet-bar");
   div.innerHTML = "📍";
-  div.style.background = "#fff";
+
+  div.style.background = "#ffffff";
+  div.style.width = "42px";
+  div.style.height = "42px";
   div.style.display = "flex";
   div.style.alignItems = "center";
   div.style.justifyContent = "center";
   div.style.cursor = "pointer";
+  div.style.fontSize = "20px";
+
+  // Evita conflito com o mapa
+  L.DomEvent.disableClickPropagation(div);
 
   div.onclick = () => {
-    map.locate({ setView: true, maxZoom: 17 });
+    map.locate({
+      setView: true,
+      maxZoom: 17
+    });
   };
 
   return div;
@@ -38,12 +68,16 @@ gpsControl.onAdd = function () {
 
 gpsControl.addTo(map);
 
-// MOSTRA LOCALIZAÇÃO
-map.on("locationfound", (e) => {
+// ================= EVENTO DE LOCALIZAÇÃO =================
+map.on("locationfound", function (e) {
   L.circleMarker(e.latlng, {
     radius: 6,
-    color: "blue",
-    fillColor: "blue",
-    fillOpacity: 0.8
+    color: "#1976d2",
+    fillColor: "#1976d2",
+    fillOpacity: 0.9
   }).addTo(map);
+});
+
+map.on("locationerror", function () {
+  alert("Não foi possível obter a localização.");
 });
