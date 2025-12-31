@@ -1,135 +1,139 @@
+/* ================= RESET BÁSICO ================= */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 body {
-  background: #f2f2f2;
+  background: #f4f6f8;
+  color: #333;
 }
 
-.topo {
+/* ================= CABEÇALHO ================= */
+.app-header {
   background: #e6e6e6;
-  padding: 10px;
+  padding: 14px 16px;
   text-align: center;
+  border-bottom: 1px solid #ccc;
 }
 
-.topo h1 {
-  color: #2e7d32;
-  font-size: 18px;
+.app-header h1 {
+  color: #1f7a1f;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
-.container {
-  padding: 8px;
+.app-header p {
+  font-size: 13px;
+  color: #555;
+}
+
+/* ================= CONTAINER ================= */
+.app-container {
+  padding: 12px;
   max-width: 480px;
   margin: 0 auto;
 }
 
-.bloco {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+/* ================= CARDS ================= */
+.card {
+  background: transparent;
+  margin-bottom: 14px;
 }
 
-.bloco h2 {
-  font-size: 15px;
-  color: #2e7d32;
+/* ================= FORMULÁRIO ================= */
+.form-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+/* Título Nova Missão */
+.form-card h2 {
+  color: #1f7a1f;
+  font-size: 18px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* ================= CAMPOS ================= */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px; /* MAIS ESPAÇO ENTRE OS CAMPOS */
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #444;
   margin-bottom: 6px;
 }
 
-.linha {
-  display: flex;
-  gap: 6px;
+.form-group input,
+.form-group select {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 15px;
 }
 
-.linha input {
-  flex: 1;
+/* ================= MAPA ================= */
+.map-card {
+  background: #ffffff;
   padding: 6px;
-  font-size: 13px;
-}
-
-.mapa-bloco {
-  padding: 0;
-  overflow: hidden;
+  border-radius: 10px;
 }
 
 #map {
+  height: 320px;
   width: 100%;
-  height: 280px;
+  border-radius: 8px;
 }
 
-/* ===== Botão GPS estilo FieldsArea ===== */
-.gps-btn {
-  width: 36px;
-  height: 36px;
+/* ================= RESUMO ================= */
+.resumo-card {
   background: #ffffff;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.resumo-card h2 {
+  color: #1f7a1f;
+  font-size: 18px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.resumo-card p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* ================= BOTÃO ================= */
+.primary-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #1f7a1f;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.gps-alvo {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #1e90ff;
-  border-radius: 50%;
-  position: relative;
+.primary-btn:active {
+  opacity: 0.9;
 }
 
-.gps-alvo::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  background: #1e90ff;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* animação suave ao ativar */
-.gps-ativo .gps-alvo {
-  animation: pulse 0.6s ease-out;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
+/* ================= RESPONSIVO ================= */
+@media (max-width: 360px) {
+  #map {
+    height: 280px;
   }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-/* ===== Botão de camadas IGUAL ao botão da mira ===== */
-.leaflet-control-layers {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 6px;
-  box-shadow: none;
-}
-
-.leaflet-control-layers-toggle {
-  width: 36px !important;
-  height: 36px !important;
-  background-size: 18px 18px !important;
-  background-position: center center !important;
-}
-
-/* Remove padding interno do Leaflet */
-.leaflet-control-layers-toggle::after {
-  display: none;
-}
-
-/* Quando expandir, mantém o menu normal */
-.leaflet-control-layers-expanded {
-  width: auto !important;
-  height: auto !important;
 }
