@@ -36,22 +36,22 @@ L.control.layers(
   { position: "topright" }
 ).addTo(map);
 
-// ===== BOTÃO GPS =====
+// ===== BOTÃO GPS (estilo FieldsArea) =====
 const botaoGPS = L.control({ position: "topright" });
 
 botaoGPS.onAdd = function () {
-  const div = L.DomUtil.create("div", "leaflet-control leaflet-bar");
-  div.innerHTML = "📍";
-  div.style.width = "36px";
-  div.style.height = "36px";
-  div.style.display = "flex";
-  div.style.alignItems = "center";
-  div.style.justifyContent = "center";
-  div.style.cursor = "pointer";
-  div.style.background = "#ffffff";
+  const div = L.DomUtil.create("div", "leaflet-control leaflet-bar gps-btn");
+
+  div.innerHTML = `
+    <div class="gps-alvo"></div>
+  `;
+
   div.title = "Minha localização";
 
   div.onclick = function () {
+    div.classList.add("gps-ativo");
+    setTimeout(() => div.classList.remove("gps-ativo"), 600);
+
     map.locate({ enableHighAccuracy: true });
   };
 
@@ -59,7 +59,6 @@ botaoGPS.onAdd = function () {
 };
 
 botaoGPS.addTo(map);
-
 // ===== EVENTOS GPS =====
 let marcadorLocalizacao = null;
 
@@ -84,3 +83,4 @@ map.on("locationfound", function (e) {
 map.on("locationerror", function () {
   alert("Não foi possível acessar o GPS.");
 });
+
