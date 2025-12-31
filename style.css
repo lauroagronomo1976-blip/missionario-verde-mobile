@@ -108,3 +108,23 @@ body {
     transform: scale(1);
   }
 }
+/* ===== Ajuste botão de camadas (igual à mira GPS) ===== */
+.leaflet-control-layers {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.leaflet-control-layers-toggle {
+  width: 36px !important;
+  height: 36px !important;
+  background-size: 18px 18px;
+}
+
+/* Remove estilos antigos que deixam grande */
+.leaflet-control-layers-expanded {
+  width: auto;
+  height: auto;
+}
+
