@@ -1,86 +1,49 @@
-// ===== CAMADAS =====
+// MAPA
+const map = L.map("map").setView([-15.78, -47.93], 14);
 
-// Mapa de ruas (OpenStreetMap)
-const camadaRua = L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap"
-  }
-);
+// CAMADAS
+const rua = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19
+}).addTo(map);
 
-// Mapa Satélite (Esri)
-const camadaSatelite = L.tileLayer(
+const satelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {
-    maxZoom: 19,
-    maxNativeZoom: 17,
-    attribution: "Esri"
-  }
+  { maxZoom: 19 }
 );
 
-// ===== MAPA =====
-const map = L.map("map", {
-  center: [-15.5, -55.5], // Brasil
-  zoom: 5,
-  layers: [camadaRua]
-});
-
-// Controle de camadas
 L.control.layers(
-  {
-    "Rua": camadaRua,
-    "Satélite": camadaSatelite
-  },
-  {},
+  { Rua: rua, Satélite: satelite },
+  null,
   { position: "topright" }
 ).addTo(map);
 
-// ===== BOTÃO GPS (estilo FieldsArea) =====
-const botaoGPS = L.control({ position: "topright" });
+// BOTÃO MIRA (GPS) – estilo Fields
+const gpsControl = L.control({ position: "topright" });
 
-botaoGPS.onAdd = function () {
-  const div = L.DomUtil.create("div", "leaflet-control leaflet-bar gps-btn");
+gpsControl.onAdd = function () {
+  const div = L.DomUtil.create("div", "gps-button");
+  div.innerHTML = "📍";
+  div.style.background = "#fff";
+  div.style.display = "flex";
+  div.style.alignItems = "center";
+  div.style.justifyContent = "center";
+  div.style.cursor = "pointer";
 
-  div.innerHTML = `
-    <div class="gps-alvo"></div>
-  `;
-
-  div.title = "Minha localização";
-
-  div.onclick = function () {
-    div.classList.add("gps-ativo");
-    setTimeout(() => div.classList.remove("gps-ativo"), 600);
-
-    map.locate({ enableHighAccuracy: true });
+  div.onclick = () => {
+    map.locate({ setView: true, maxZoom: 17 });
   };
 
   return div;
 };
 
-botaoGPS.addTo(map);
-// ===== EVENTOS GPS =====
-let marcadorLocalizacao = null;
+gpsControl.addTo(map);
 
-map.on("locationfound", function (e) {
-  const latlng = e.latlng;
-
-  const zoomSeguro = map.hasLayer(camadaSatelite) ? 17 : 18;
-  map.flyTo(latlng, zoomSeguro);
-
-  if (marcadorLocalizacao) {
-    map.removeLayer(marcadorLocalizacao);
-  }
-
-  marcadorLocalizacao = L.circleMarker(latlng, {
+// MOSTRA LOCALIZAÇÃO
+map.on("locationfound", (e) => {
+  L.circleMarker(e.latlng, {
     radius: 6,
-    color: "#1e90ff",
-    fillColor: "#1e90ff",
-    fillOpacity: 0.9
+    color: "blue",
+    fillColor: "blue",
+    fillOpacity: 0.8
   }).addTo(map);
 });
-
-map.on("locationerror", function () {
-  alert("Não foi possível acessar o GPS.");
-});
-
