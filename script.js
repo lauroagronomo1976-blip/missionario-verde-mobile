@@ -1,4 +1,5 @@
 // ===== MAPA =====
+let circuloGPS = null;
 const map = L.map("map").setView([-15.7801, -47.9292], 5);
 
 // Camadas
@@ -45,43 +46,29 @@ div.style.textAlign = "center";
 
 controleCamadas.addTo(map);
 
-// ===== BOTÃO GPS (LOGO ABAIXO) =====
+// ===== BOTÃO GPS (BOLINHA AZUL) =====
 const controleGPS = L.control({ position: "topright" });
 
 controleGPS.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+
   div.style.width = "48px";
-div.style.height = "48px";
-div.style.lineHeight = "48px";
-div.style.fontSize = "22px";
-div.style.textAlign = "center";
+  div.style.height = "48px";
+  div.style.lineHeight = "48px";
+  div.style.fontSize = "22px";
+  div.style.textAlign = "center";
+
   div.innerHTML = "🎯";
   div.title = "Minha localização";
 
   div.onclick = function (e) {
     L.DomEvent.stop(e);
 
-    if (!navigator.geolocation) {
-      alert("GPS não disponível");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
-        map.setView([lat, lng], 18, { animate: true });
-
-        L.marker([lat, lng]).addTo(map);
-      },
-      () => alert("Erro ao obter localização"),
-      {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 5000
-      }
-    );
+    map.locate({
+      setView: true,
+      maxZoom: 18,
+      enableHighAccuracy: true
+    });
   };
 
   return div;
@@ -89,4 +76,28 @@ div.style.textAlign = "center";
 
 controleGPS.addTo(map);
 
+// ===== EVENTO: LOCALIZAÇÃO ENCONTRADA =====
+map.on("locationfound", function (e) {
+  const latlng = e.latlng;
+  const raio = e.accuracy / 2;
 
+  // Remove localização anterior
+  if (circuloGPS) {
+    map.removeLayer(circuloGPS);
+  }
+
+  // Bolinha azul (estilo GPS)
+  circuloGPS = L.circleMarker(latlng, {
+    radius: 8,
+    fillColor: "#007bff",
+    color: "#007bff",
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.7
+  }).addTo(map);
+});
+
+// ===== EVENTO: ERRO DE GPS =====
+map.on("locationerror", function () {
+  alert("Não foi possível obter a localização GPS.");
+});
