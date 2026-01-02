@@ -1,27 +1,41 @@
 // ================= MAPA =================
-const map = L.map("map").setView([-15.78, -47.93], 13);
 
-// ================= CAMADAS BASE =================
+// Local inicial neutro (Brasil)
+const mapaInicial = [-14.2, -51.9];
+
+const map = L.map("map", {
+  zoomControl: true,
+  inertia: true,
+  inertiaDeceleration: 3000,
+  zoomAnimation: true,
+  fadeAnimation: true
+}).setView(mapaInicial, 4);
+
+// ================= CAMADAS =================
+
+// Rua
 const rua = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
     maxZoom: 19,
-    attribution: "OpenStreetMap"
+    attribution: "© OpenStreetMap"
   }
 );
 
+// Satélite (com limite de zoom para NÃO quebrar imagem)
 const satelite = L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   {
-    maxZoom: 19,
-    attribution: "Esri World Imagery"
+    maxZoom: 18,       // 👈 evita “Map data not yet available”
+    maxNativeZoom: 17, // 👈 zoom real da imagem
+    attribution: "© Esri"
   }
 );
 
-// camada inicial
+// Camada inicial
 rua.addTo(map);
 
-// ================= CONTROLE DE CAMADAS (IMPORTANTE) =================
+// ================= CONTROLE DE CAMADAS =================
 L.control.layers(
   {
     "Rua": rua,
@@ -30,17 +44,21 @@ L.control.layers(
   null,
   {
     position: "topright",
-    collapsed: false   // <<< ISSO é essencial no mobile
+    collapsed: true
   }
 ).addTo(map);
 
-// ================= BOTÃO MIRA (GPS) =================
+// ================= GPS ESTÁVEL =================
+
+let localizacaoAtual = null;
+
+// Controle da mira
 const gpsControl = L.control({ position: "topright" });
 
 gpsControl.onAdd = function () {
   const div = L.DomUtil.create("div", "gps-button leaflet-bar");
-
   div.innerHTML = "📍";
+
   div.style.background = "#fff";
   div.style.width = "42px";
   div.style.height = "42px";
@@ -52,21 +70,45 @@ gpsControl.onAdd = function () {
 
   L.DomEvent.disableClickPropagation(div);
 
-  div.onclick = () => {
-    map.locate({ setView: true, maxZoom: 17 });
-  };
+  div.onclick = localizarComPrecisao;
 
   return div;
 };
 
 gpsControl.addTo(map);
 
-// ================= LOCALIZAÇÃO =================
-map.on("locationfound", e => {
-  L.circleMarker(e.latlng, {
-    radius: 6,
-    color: "#1976d2",
-    fillColor: "#1976d2",
-    fillOpacity: 0.9
-  }).addTo(map);
-});
+// ================= FUNÇÃO GPS CORRETA =================
+function localizarComPrecisao() {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const latlng = [pos.coords.latitude, pos.coords.longitude];
+
+      // Remove localização anterior
+      if (localizacaoAtual) {
+        map.removeLayer(localizacaoAtual);
+      }
+
+      // Bolinha azul (localização)
+      localizacaoAtual = L.circleMarker(latlng, {
+        radius: 7,
+        color: "#1976d2",
+        fillColor: "#1976d2",
+        fillOpacity: 0.9
+      }).addTo(map);
+
+      // Zoom suave e inteligente
+      map.flyTo(latlng, 16, {
+        animate: true,
+        duration: 1.2
+      });
+    },
+    () => {
+      alert("Não foi possível obter a localização GPS.");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 8000,
+      maximumAge: 0
+    }
+  );
+}
