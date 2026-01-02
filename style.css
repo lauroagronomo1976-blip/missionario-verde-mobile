@@ -120,3 +120,51 @@ body {
   display: none !important;
 }
 
+/* ================= MAPA – AJUSTE FINO DE CONTROLES ================= */
+
+/* Reduz tamanho do botão de camadas */
+.leaflet-control-layers {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+}
+
+/* Ícone do botão de camadas */
+.leaflet-control-layers-toggle {
+  width: 34px !important;
+  height: 34px !important;
+  background-size: 16px 16px;
+}
+
+/* Reduz botão da mira GPS para mesma proporção */
+.gps-button {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 18px !important;
+}
+
+/* Área expandida das camadas */
+.leaflet-control-layers-expanded {
+  position: absolute !important;
+  top: 0;
+  right: 38px; /* <<< joga opções para o LADO */
+  white-space: nowrap;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+/* Corrige labels */
+.leaflet-control-layers-expanded label {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+/* Remove sobreposição em mobile */
+.leaflet-top.leaflet-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
