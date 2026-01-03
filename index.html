@@ -1,82 +1,70 @@
 <!DOCTYPE html>
-<div class="map-buttons">
-  <button class="map-btn" onclick="toggleCamadas()">🗺️</button>
-
-  <div id="menu-camadas" class="camadas-menu hidden">
-    <button onclick="usarRua()">Rua</button>
-    <button onclick="usarSatelite()">Satélite</button>
-  </div>
-</div>
-<script>
-  function toggleCamadas() {
-    const menu = document.getElementById('menu-camadas');
-    menu.classList.toggle('hidden');
-  }
-</script>
-
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Missionário Verde</title>
 
-  <!-- Leaflet -->
+  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- CSS -->
+  <!-- App CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
   <!-- CABEÇALHO -->
-  <header class="app-header">
-    <h1>Missionário Verde</h1>
+  <header class="header">
+    Missionário Verde
   </header>
 
-  <main class="app-container">
+  <!-- CONTEÚDO -->
+  <main class="container">
 
-    <!-- NOVA MISSÃO -->
-    <section class="card form-card">
-      <h2>Nova Missão</h2>
+    <h2 class="titulo">Nova Missão</h2>
 
-      <div class="form-group">
-        <label>Safra</label>
-        <input type="text" placeholder="Ex: 2024/2025" />
-      </div>
+    <!-- FORMULÁRIO -->
+    <section class="form-box">
+      <label>Safra</label>
+      <input type="text" />
 
-      <div class="form-group">
-        <label>Missão</label>
-        <select>
-          <option>Selecione</option>
-          <option>Inspeção Técnica de Lavoura</option>
-        </select>
-      </div>
+      <label>Missão</label>
+      <input type="text" />
 
-      <div class="form-group">
-        <label>Fazenda</label>
-        <input type="text" />
-      </div>
+      <label>Fazenda</label>
+      <input type="text" />
 
-      <div class="form-group">
-        <label>Talhão</label>
-        <input type="text" />
-      </div>
+      <label>Talhão</label>
+      <input type="text" />
     </section>
 
     <!-- MAPA -->
-    <section class="card map-card">
+    <section class="map-box">
       <div id="map"></div>
+
+      <!-- BOTÕES DO MAPA -->
+      <div class="map-controls">
+
+        <button class="map-btn" onclick="toggleCamadas()">🗺️</button>
+        <button class="map-btn" onclick="localizar()">🎯</button>
+
+        <div id="menu-camadas" class="camadas hidden">
+          <button onclick="usarRua()">Rua</button>
+          <button onclick="usarSatelite()">Satélite</button>
+        </div>
+
+      </div>
     </section>
 
     <!-- RESUMO -->
-    <section class="card resumo-card">
-      <h2>Resumo da Missão</h2>
-      <p>Aguardando lançamentos...</p>
+    <section class="resumo-box">
+      <h3>Resumo Geral</h3>
+      <p>Aguardando informações…</p>
     </section>
 
   </main>
@@ -84,9 +72,8 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- JS -->
+  <!-- App JS -->
   <script src="script.js"></script>
 
 </body>
 </html>
-
