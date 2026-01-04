@@ -74,4 +74,3 @@ document.getElementById("optSat").addEventListener("click", () => {
   });
 
 });
-
