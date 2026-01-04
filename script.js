@@ -26,15 +26,4 @@ document.addEventListener("DOMContentLoaded", function () {
   rua.addTo(map);
 
   // ===== CONTROLE DE CAMADAS (ESTÁVEL) =====
-  L.control.layers(
-    {
-      Rua: rua,
-      Satélite: satelite
-    },
-    null,
-    {
-      position: "topright"
-    }
-  ).addTo(map);
-
-});
+  
