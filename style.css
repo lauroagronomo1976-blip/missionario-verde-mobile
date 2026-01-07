@@ -12,7 +12,7 @@ body {
 .header {
   background: #e0e0e0;
   color: #1f7a1f;
-  font-size: 20px;
+  >font-size: 20px;
   font-weight: bold;
   padding: 12px;
   text-align: left;
@@ -25,8 +25,10 @@ body {
 
 /* TÍTULOS */
 .section-title {
+  font-size: 14px;   /* diminui o “Nova Missão” */
   color: #1f7a1f;
-  margin: 12px 0 8px 0;
+  font-weight: 600;
+  margin: 10px 0;
 }
 
 /* FORMULÁRIO */
@@ -110,3 +112,4 @@ body {
 .layer-menu div:hover {
   background: #f0f0f0;
 }
+
