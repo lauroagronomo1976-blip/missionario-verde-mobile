@@ -148,4 +148,49 @@ if (btnMarcarPonto) {
   });
 }
 
+// ==========================
+// REGISTRAR PONTO (MARCAR)
+// ==========================
+
+const btnMarcarPonto = document.getElementById("btnMarcarPonto");
+
+// lista local de pontos
+let pontosRegistrados = [];
+
+if (btnMarcarPonto) {
+  btnMarcarPonto.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("GPS não disponível.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        // marcador azul simples
+        const marcador = L.marker([lat, lng]).addTo(map);
+
+        pontosRegistrados.push({
+          id: pontosRegistrados.length + 1,
+          lat,
+          lng,
+          data: new Date().toLocaleString()
+        });
+
+        marcador.bindPopup(
+          `<strong>Ponto ${pontosRegistrados.length}</strong><br>
+           Lat: ${lat.toFixed(6)}<br>
+           Lng: ${lng.toFixed(6)}`
+        ).openPopup();
+      },
+      () => {
+        alert("Erro ao obter localização.");
+      },
+      { enableHighAccuracy: true }
+    );
+  });
+}
+
 
