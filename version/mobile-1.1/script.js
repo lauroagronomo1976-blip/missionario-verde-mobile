@@ -122,13 +122,17 @@ if (!dados.missao) {
 
           const marcador = L.marker([lat, lng]).addTo(map);
 
-          pontosRegistrados.push({
-            id: pontosRegistrados.length + 1,
-            lat,
-            lng,
-            data: new Date().toLocaleString()
-          });
-
+          const ponto = {
+  id: pontosRegistrados.length + 1,
+  latitude: lat,
+  longitude: lng,
+  data: new Date().toISOString(),
+  safra: dados.safra,
+  empresa: dados.empresa,
+  fazenda: dados.fazenda,
+  talhao: dados.talhao,
+  missao: dados.missao
+};
           marcador.bindPopup(
             `<strong>Ponto ${pontosRegistrados.length}</strong><br>
              Lat: ${lat.toFixed(6)}<br>
