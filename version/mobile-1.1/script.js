@@ -134,10 +134,17 @@ if (!dados.missao) {
   missao: dados.missao
 };
           marcador.bindPopup(
-            `<strong>Ponto ${pontosRegistrados.length}</strong><br>
-             Lat: ${lat.toFixed(6)}<br>
-             Lng: ${lng.toFixed(6)}`
-          ).openPopup();
+  `
+  <strong>📍 Ponto ${ponto.id}</strong><br><br>
+  <strong>Missão:</strong> ${ponto.missao}<br>
+  <strong>Safra:</strong> ${ponto.safra || "-"}<br>
+  <strong>Empresa:</strong> ${ponto.empresa || "-"}<br>
+  <strong>Fazenda:</strong> ${ponto.fazenda || "-"}<br>
+  <strong>Talhão:</strong> ${ponto.talhao || "-"}<br><br>
+  <strong>Lat:</strong> ${ponto.latitude.toFixed(6)}<br>
+  <strong>Lng:</strong> ${ponto.longitude.toFixed(6)}
+  `
+);openPopup();
         },
         () => alert("Erro ao obter localização."),
         { enableHighAccuracy: true }
