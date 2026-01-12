@@ -92,6 +92,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnMarcarPonto = document.getElementById("btnMarcarPonto");
   let pontosRegistrados = [];
 
+  // ===== COLETA DOS DADOS DO FORMULÁRIO =====
+function obterDadosFormulario() {
+  return {
+    safra: document.querySelector(".field.safra input")?.value || "",
+    empresa: document.querySelector(".field.empresa input")?.value || "",
+    fazenda: document.querySelectorAll(".field input")[2]?.value || "",
+    talhao: document.querySelectorAll(".field input")[3]?.value || "",
+    missao: document.getElementById("missaoInput")?.value || ""
+  };
+}
   if (btnMarcarPonto) {
     btnMarcarPonto.addEventListener("click", () => {
       if (!navigator.geolocation) {
