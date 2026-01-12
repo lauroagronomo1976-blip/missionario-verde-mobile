@@ -103,7 +103,13 @@ function obterDadosFormulario() {
   };
 }
   if (btnMarcarPonto) {
-    btnMarcarPonto.addEventListener("click", () => {
+    btnMarcarPonto.addEventListener("click", const dados = obterDadosFormulario();
+
+if (!dados.missao) {
+  alert("Preencha o campo Missão antes de marcar o ponto.");
+  return;
+}
+() => {
       if (!navigator.geolocation) {
         alert("GPS não disponível.");
         return;
