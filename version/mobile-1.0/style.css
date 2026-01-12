@@ -12,7 +12,7 @@ body {
 .header {
   background: #e0e0e0;
   color: #1f7a1f;
-  font-size: 20px;
+  >font-size: 20px;
   font-weight: bold;
   padding: 12px;
   text-align: left;
@@ -25,8 +25,10 @@ body {
 
 /* TÍTULOS */
 .section-title {
+  font-size: 14px;   /* diminui o “Nova Missão” */
   color: #1f7a1f;
-  margin: 12px 0 8px 0;
+  font-weight: 600;
+  margin: 10px 0;
 }
 
 /* FORMULÁRIO */
@@ -110,3 +112,71 @@ body {
 .layer-menu div:hover {
   background: #f0f0f0;
 }
+/* ==========================
+   FORMULÁRIO – MOBILE 1.1
+========================== */
+
+.form-area {
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.field label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.field input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* Safra menor */
+.field.safra {
+  flex: 0.6;
+}
+
+/* Empresa maior */
+.field.empresa {
+  flex: 1.4;
+}
+
+/* BOTÃO MARCAR PONTO */
+.action-area {
+  margin: 12px 0;
+  text-align: left;
+}
+
+.btn-marcar {
+  background-color: #1f7a1f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-marcar:active {
+  opacity: 0.85;
+}
+
+
