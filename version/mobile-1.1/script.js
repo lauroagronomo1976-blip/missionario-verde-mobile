@@ -19,7 +19,13 @@ console.log("JS carregado");
 
   rua.addTo(map);
 
-  /************** BOTÕES DO MAPA **************/
+/ ==========================
+// ESTADO DO MAPA
+// ==========================
+let marcadorTemporario = null;
+let pontosRegistrados = [];
+ 
+ /************** BOTÕES DO MAPA **************/
   document.getElementById("btnLayers").onclick = () => {
     if (map.hasLayer(rua)) {
       map.removeLayer(rua);
