@@ -36,31 +36,48 @@ let pontosRegistrados = [];
     }
   };
 
-  document.getElementById("btnLocate").onclick = () => {
-    map.locate({ setView: true, maxZoom: 17 });
-  };
-
+  document.getElementById("btnLocate").addEventListener("click", () => {
+  map.locate({
+    setView: true,
+    maxZoom: 17,
+    enableHighAccuracy: true
+  });
+});
   /************** PONTOS **************/
-  let ultimoPonto = null;
+// ==========================
+// BOTÃO MARCAR (PONTO TEMPORÁRIO)
+// ==========================
+const btnMarcarPonto = document.getElementById("btnMarcarPonto");
 
-  const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnGravarPonto");
-  const btnFinalizar = document.getElementById("btnFinalizarMissao");
+if (btnMarcarPonto) {
+  btnMarcarPonto.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("GPS não disponível.");
+      return;
+    }
 
-  btnMarcar.onclick = () => {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-      if (ultimoPonto) map.removeLayer(ultimoPonto);
+        // Remove ponto temporário anterior
+        if (marcadorTemporario) {
+          map.removeLayer(marcadorTemporario);
+        }
 
-      ultimoPonto = L.marker([lat, lng]).addTo(map)
-        .bindPopup("📍 Ponto temporário")
-        .openPopup();
+        // Cria novo ponto temporário
+        marcadorTemporario = L.marker([lat, lng]).addTo(map);
 
-    });
-  };
-
+        marcadorTemporario.bindPopup("📍 Ponto marcado (não gravado)");
+      },
+      () => {
+        alert("Erro ao obter localização.");
+      },
+      { enableHighAccuracy: true }
+    );
+  });
+}
   btnGravar.onclick = () => {
     if (!ultimoPonto) {
       alert("Marque um ponto antes.");
