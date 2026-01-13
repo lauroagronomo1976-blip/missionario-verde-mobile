@@ -43,8 +43,8 @@ let pontosRegistrados = [];
     enableHighAccuracy: true
   });
 });
-  /************** PONTOS **************/
-// ==========================
+  
+ // ==========================
 // BOTÃO MARCAR (PONTO TEMPORÁRIO)
 // ==========================
 const btnMarcarPonto = document.getElementById("btnMarcarPonto");
@@ -78,7 +78,44 @@ if (btnMarcarPonto) {
     );
   });
 }
-  btnGravar.onclick = () => {
+// ==========================
+// BOTÃO GRAVAR PONTO
+// ==========================
+const btnGravarPonto = document.getElementById("btnGravarPonto");
+
+if (btnGravarPonto) {
+  btnGravarPonto.addEventListener("click", () => {
+    if (!marcadorTemporario) {
+      alert("Marque um ponto antes de gravar.");
+      return;
+    }
+
+    const missao = document.getElementById("missaoInput")?.value || "Sem missão";
+    const latlng = marcadorTemporario.getLatLng();
+
+    const ponto = {
+      id: pontosRegistrados.length + 1,
+      missao: missao,
+      lat: latlng.lat,
+      lng: latlng.lng,
+      data: new Date().toLocaleString()
+    };
+
+    pontosRegistrados.push(ponto);
+
+    marcadorTemporario.bindPopup(
+      `<strong>Ponto ${ponto.id}</strong><br>
+       Missão: ${ponto.missao}<br>
+       Lat: ${ponto.lat.toFixed(6)}<br>
+       Lng: ${ponto.lng.toFixed(6)}`
+    ).openPopup();
+
+    marcadorTemporario = null;
+
+    alert("Ponto gravado com sucesso!");
+  });
+ 
+ btnGravar.onclick = () => {
     if (!ultimoPonto) {
       alert("Marque um ponto antes.");
       return;
