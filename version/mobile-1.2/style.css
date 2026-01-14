@@ -227,3 +227,15 @@ body {
   overflow: hidden;
 }
 
+.registro-area {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.registro-area h3 {
+  color: #1f7a1f;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
