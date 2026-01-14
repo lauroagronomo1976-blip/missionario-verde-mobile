@@ -54,16 +54,16 @@ body {
 
 /* MAPA */
 #map-container {
-  position: relative;
   width: 100%;
-  height: 260px; /* 👈 menor e ideal */
-  margin-bottom: 12px;
+  height: 60vh;
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 #map {
   width: 100%;
   height: 100%;
-  border-radius: 12px;
 }
 
 /* BOTÕES NO MAPA */
