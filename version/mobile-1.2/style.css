@@ -217,7 +217,7 @@ body {
 /* ===== MAPA (OBRIGATÓRIO) ===== */
 #map-container {
   width: 100%;
-  height: 45vh;   /* controla o tamanho total do mapa */
+  height: 40vh;   /* controla o tamanho total do mapa */
   margin-top: 12px;
   border-radius: 12px;
   overflow: hidden;
