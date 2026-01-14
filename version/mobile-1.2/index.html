@@ -66,6 +66,51 @@
       <!-- BOTÃO MARCAR (ÚNICO E CORRETO) -->
 <div class="action-area">
   <button id="btnMarcarPonto" class="btn-marcar">Marcar</button>
+  <!-- REGISTRO DE INDIVÍDUOS (VERSÃO 1.2) -->
+<div id="registroIndividuos" class="registro-area" style="display: none;">
+
+  <h3>Registro Técnico</h3>
+
+  <div class="form-row">
+    <div class="field">
+      <label>Indivíduo / Problema</label>
+      <input type="text" id="individuoInput" placeholder="Ex: Lagarta, Percevejo, Planta Daninha">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <label>Espécie</label>
+      <input type="text" id="especieInput" placeholder="Ex: Spodoptera frugiperda">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <label>Fase</label>
+      <select id="faseSelect">
+        <option value="">Selecione</option>
+        <option>Ovo</option>
+        <option>1º Ínstar</option>
+        <option>2º Ínstar</option>
+        <option>3º Ínstar</option>
+        <option>4º Ínstar</option>
+        <option>5º Ínstar</option>
+        <option>Pupa</option>
+        <option>Adulto</option>
+        <option>Ninfa</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <label>Quantidade por ponto</label>
+      <input type="number" id="quantidadeInput" min="0" placeholder="Ex: 3">
+    </div>
+  </div>
+
+</div>
   <button id="btnGravarPonto" class="btn-gravar">Gravar Ponto</button>
   <button id="btnFinalizarMissao" class="btn-finalizar">Finalizar Missão</button>
 </div>
