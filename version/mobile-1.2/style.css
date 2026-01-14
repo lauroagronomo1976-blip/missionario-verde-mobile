@@ -216,13 +216,13 @@ body {
 #map-container {
   position: relative;
   width: 100%;
-  height: 320px; /* MOBILE */
+  height: 60vh; /* MOBILE */
   margin-top: 12px;
 }
 
 #map {
   width: 100%;
-  height: 100%;
+  height: 100%h;
   border-radius: 12px;
   overflow: hidden;
 }
