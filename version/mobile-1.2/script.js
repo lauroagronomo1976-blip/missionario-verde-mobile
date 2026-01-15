@@ -1,3 +1,4 @@
+let modoMarcarPonto = false;
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
@@ -72,41 +73,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnGravar = document.getElementById("btnGravarPonto");
   const btnFinalizar = document.getElementById("btnFinalizarMissao");
 
-  btnMarcar.addEventListener("click", () => {
-    map.locate({ enableHighAccuracy: true });
-  });
+  btnLocate.addEventListener("click", () => {
+  map.locate({ enableHighAccuracy: true });
+});
 
   map.on("locationfound", (e) => {
-    if (pontoAtual) map.removeLayer(pontoAtual);
 
-    pontoAtual = L.marker(e.latlng).addTo(map);
-    pontoAtual.bindPopup("Ponto marcado (não gravado)").openPopup();
-  });
+  // Se NÃO estiver em modo marcar, apenas centraliza
+  if (!modoMarcarPonto) {
+    map.setView(e.latlng, 17);
+    return;
+  }
 
-  btnGravar.addEventListener("click", () => {
-    if (!pontoAtual) {
-      alert("Marque um ponto primeiro.");
-      return;
-    }
+  // Se estiver em modo marcar
+  if (pontoAtual) {
+    map.removeLayer(pontoAtual);
+  }
 
-    pontosSalvos.push({
-      latlng: pontoAtual.getLatLng(),
-      data: new Date().toISOString()
-    });
+  pontoAtual = L.marker(e.latlng).addTo(map);
+  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
 
-    pontoAtual.bindPopup(
-      `📍 Ponto ${pontosSalvos.length}<br>
-       ${pontoAtual.getLatLng().lat.toFixed(6)},
-       ${pontoAtual.getLatLng().lng.toFixed(6)}`
-    );
-
-    pontoAtual = null;
-    alert("Ponto gravado!");
-  });
-
-  btnFinalizar.addEventListener("click", () => {
-    alert(`Missão finalizada com ${pontosSalvos.length} pontos.`);
-    pontosSalvos = [];
-  });
-
+  modoMarcarPonto = false; // reseta o modo
 });
