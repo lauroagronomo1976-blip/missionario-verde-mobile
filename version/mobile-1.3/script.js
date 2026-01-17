@@ -174,3 +174,59 @@ function renderListaRegistros() {
 }
 
 });
+
+// ==========================
+// REGISTROS TÉCNICOS POR PONTO (v1.3)
+// ==========================
+
+let registrosTecnicos = [];
+
+const btnAdicionarRegistro = document.getElementById("btnAdicionarRegistro");
+const listaRegistros = document.getElementById("listaRegistros");
+
+if (btnAdicionarRegistro) {
+  btnAdicionarRegistro.addEventListener("click", () => {
+    const individuo = document.getElementById("individuoInput").value.trim();
+    const especie = document.getElementById("especieInput").value.trim();
+    const fase = document.getElementById("faseSelect").value;
+    const quantidade = document.getElementById("quantidadeInput").value;
+
+    if (!individuo || !quantidade) {
+      alert("Preencha ao menos Indivíduo e Quantidade.");
+      return;
+    }
+
+    const registro = {
+      individuo,
+      especie,
+      fase,
+      quantidade
+    };
+
+    registrosTecnicos.push(registro);
+    renderizarRegistros();
+
+    // Limpar campos
+    document.getElementById("individuoInput").value = "";
+    document.getElementById("especieInput").value = "";
+    document.getElementById("faseSelect").value = "";
+    document.getElementById("quantidadeInput").value = "";
+  });
+}
+
+function renderizarRegistros() {
+  listaRegistros.innerHTML = "";
+
+  registrosTecnicos.forEach((reg, index) => {
+    const div = document.createElement("div");
+    div.className = "registro-item";
+    div.innerHTML = `
+      <strong>${index + 1}. ${reg.individuo}</strong><br>
+      Espécie: ${reg.especie || "-"}<br>
+      Fase: ${reg.fase || "-"}<br>
+      Quantidade: ${reg.quantidade}
+      <hr>
+    `;
+    listaRegistros.appendChild(div);
+  });
+}
