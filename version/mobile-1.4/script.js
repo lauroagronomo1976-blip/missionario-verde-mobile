@@ -122,6 +122,15 @@ let pontoAtivo = null;
 
   // GRAVAR → transforma ponto temporário em definitivo
   btnGravar.addEventListener("click", () => {
+    const dataFim = new Date();
+  const duracaoMs = dataFim - pontoAtual.dataHoraInicio;
+
+  const totalSegundos = Math.floor(duracaoMs / 1000);
+  const minutos = Math.floor(totalSegundos / 60);
+  const segundos = totalSegundos % 60;
+
+  pontoAtual.duracao = `${minutos} min ${segundos} s`;
+    
     if (!pontoTemp) {
       alert("Marque um ponto antes de gravar.");
       return;
@@ -131,12 +140,13 @@ let pontoAtivo = null;
 
     const latlng = pontoTemp.getLatLng();
 
-    pontoTemp.bindPopup(
-      `<strong>Missão:</strong> ${missao}<br>
-       Lat: ${latlng.lat.toFixed(6)}<br>
-       Lng: ${latlng.lng.toFixed(6)}`
-    );
-
+    pontoAtivo.marcador.bindPopup(`
+  📍 Ponto ${pontos.length}<br>
+  Missão: ${pontoAtivo.missao}<br>
+  Lat: ${pontoAtivo.lat.toFixed(6)}<br>
+  Lng: ${pontoAtivo.lng.toFixed(6)}<br>
+  ⏱️ Tempo no ponto: ${pontoAtivo.duracao}
+`);
     pontosGravados.push({
       missao,
       lat: latlng.lat,
