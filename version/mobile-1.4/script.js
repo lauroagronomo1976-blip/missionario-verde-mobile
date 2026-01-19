@@ -67,9 +67,29 @@ let pontoAtivo = null;
     dataHoraInicio: new Date(),
     registros: []
   };
-  map.on("locationerror", () => {
-    alert("Não foi possível acessar o GPS.");
-  });
+
+  // remove marcador temporário anterior (se existir)
+  if (window.markerTemp) {
+    map.removeLayer(window.markerTemp);
+  }
+
+  // cria marcador temporário
+  window.markerTemp = L.marker(e.latlng).addTo(map);
+
+  window.markerTemp.bindPopup(
+    "📍 Ponto marcado<br><small>Aguardando gravação</small>"
+  ).openPopup();
+
+  // centraliza o mapa
+  map.setView(e.latlng, 18);
+
+  // exibe área de Registro Técnico
+  const registro = document.getElementById("registroIndividuos");
+  if (registro) {
+    registro.style.display = "block";
+  }
+
+});
 
   // ======================
   // PONTOS (1.2)
