@@ -1,164 +1,113 @@
-document.addEventListener("DOMContentLoaded", () => {
+// ===============================
+// MAPA
+// ===============================
+const map = L.map("map").setView([-15.78, -47.93], 5);
 
-  // =========================
-  // MAPA
-  // =========================
-  const map = L.map("map").setView([-15.78, -47.93], 5);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+}).addTo(map);
 
-  const rua = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19
+let pontoAtual = null;
+let inicioPonto = null;
+
+// ===============================
+// ELEMENTOS
+// ===============================
+const btnMarcar = document.getElementById("btnMarcarPonto");
+const btnGravar = document.getElementById("btnGravarPonto");
+const btnAdicionarRegistro = document.getElementById("btnAdicionarRegistro");
+
+const registroArea = document.getElementById("registroIndividuos");
+const listaRegistros = document.createElement("div");
+registroArea.appendChild(listaRegistros);
+
+// Campos do formulário
+const individuoInput = document.getElementById("individuoInput");
+const especieInput = document.getElementById("especieInput");
+const faseSelect = document.getElementById("faseSelect");
+const quantidadeInput = document.getElementById("quantidadeInput");
+
+// ===============================
+// DADOS
+// ===============================
+let registrosDoPontoAtual = [];
+
+// ===============================
+// MARCAR PONTO
+// ===============================
+btnMarcar.addEventListener("click", () => {
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+
+    if (pontoAtual) map.removeLayer(pontoAtual);
+
+    pontoAtual = L.marker([lat, lng]).addTo(map);
+    map.setView([lat, lng], 17);
+
+    inicioPonto = new Date();
+    registrosDoPontoAtual = [];
+    listaRegistros.innerHTML = "";
+
+    registroArea.style.display = "block";
   });
+});
 
-  const satelite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { maxZoom: 18 }
+// ===============================
+// ADICIONAR REGISTRO (EMPILHAR)
+// ===============================
+btnAdicionarRegistro.addEventListener("click", () => {
+  const individuo = individuoInput.value.trim();
+  const especie = especieInput.value.trim();
+  const fase = faseSelect.value;
+  const quantidade = quantidadeInput.value;
+
+  if (!individuo || !especie || !quantidade) {
+    alert("Preencha todos os campos do registro técnico");
+    return;
+  }
+
+  const registro = {
+    individuo,
+    especie,
+    fase,
+    quantidade,
+  };
+
+  registrosDoPontoAtual.push(registro);
+
+  // Mostrar na lista
+  const item = document.createElement("div");
+  item.style.borderBottom = "1px solid #ccc";
+  item.style.padding = "4px 0";
+  item.innerHTML = `
+    <strong>${individuo}</strong> – ${especie}<br>
+    Fase: ${fase} | Qtde: ${quantidade}
+  `;
+
+  listaRegistros.appendChild(item);
+
+  // Limpar formulário (ponto-chave do seu pedido)
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+  faseSelect.selectedIndex = 0;
+});
+
+// ===============================
+// GRAVAR PONTO
+// ===============================
+btnGravar.addEventListener("click", () => {
+  if (!pontoAtual) return;
+
+  const fimPonto = new Date();
+  const tempoMin = Math.round((fimPonto - inicioPonto) / 60000);
+
+  alert(
+    `PONTO GRAVADO\n\n` +
+      `Registros: ${registrosDoPontoAtual.length}\n` +
+      `Tempo no ponto: ${tempoMin} min`
   );
 
-  rua.addTo(map);
-
-  // =========================
-  // CONTROLES DE CAMADA
-  // =========================
-  let menuVisible = false;
-
-  const menu = document.createElement("div");
-  menu.className = "layer-menu";
-  menu.innerHTML = `
-    <div id="optRua">Rua</div>
-    <div id="optSat">Satélite</div>
-  `;
-  document.getElementById("map-container").appendChild(menu);
-
-  document.getElementById("btnLayers").addEventListener("click", () => {
-    menuVisible = !menuVisible;
-    menu.style.display = menuVisible ? "block" : "none";
-  });
-
-  document.getElementById("optRua").onclick = () => {
-    map.removeLayer(satelite);
-    rua.addTo(map);
-    menu.style.display = "none";
-    menuVisible = false;
-  };
-
-  document.getElementById("optSat").onclick = () => {
-    map.removeLayer(rua);
-    satelite.addTo(map);
-    menu.style.display = "none";
-    menuVisible = false;
-  };
-
-  // =========================
-  // BOTÃO MIRA (SÓ LOCALIZA)
-  // =========================
-  let marcadorMira;
-
-  document.getElementById("btnLocate").addEventListener("click", () => {
-    map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
-  });
-
-  map.on("locationfound", (e) => {
-    if (marcadorMira) map.removeLayer(marcadorMira);
-
-    marcadorMira = L.circleMarker(e.latlng, {
-      radius: 8,
-      color: "#1e90ff",
-      fillOpacity: 0.8
-    }).addTo(map);
-  });
-
-  // =========================
-  // CONTROLE DE PONTOS
-  // =========================
-  let pontoAtual = null;
-  let pontos = [];
-
-  const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnGravarPonto");
-  const btnFinalizar = document.getElementById("btnFinalizarMissao");
-
-  // =========================
-  // MARCAR PONTO
-  // =========================
-  btnMarcar.addEventListener("click", () => {
-    map.locate({ enableHighAccuracy: true });
-  });
-
-  map.on("locationfound", (e) => {
-
-    if (pontoAtual && pontoAtual.marcador) {
-      map.removeLayer(pontoAtual.marcador);
-    }
-
-    pontoAtual = {
-      lat: e.latlng.lat,
-      lng: e.latlng.lng,
-      inicio: new Date(),
-      marcador: L.marker(e.latlng).addTo(map)
-    };
-
-    pontoAtual.marcador
-      .bindPopup("📍 Ponto marcado (não gravado)")
-      .openPopup();
-
-    // mostra registro técnico
-    const reg = document.getElementById("registroIndividuos");
-    if (reg) reg.style.display = "block";
-  });
-
-  // =========================
-  // GRAVAR PONTO
-  // =========================
-  btnGravar.addEventListener("click", () => {
-
-    if (!pontoAtual) {
-      alert("Marque um ponto primeiro.");
-      return;
-    }
-
-    const fim = new Date();
-    const duracaoMs = fim - pontoAtual.inicio;
-
-    const segundos = Math.floor(duracaoMs / 1000);
-    const minutos = Math.floor(segundos / 60);
-    const tempo = `${minutos} min ${segundos % 60} s`;
-
-    const missao = document.getElementById("missaoInput").value || "—";
-
-    const pontoGravado = {
-      id: pontos.length + 1,
-      lat: pontoAtual.lat,
-      lng: pontoAtual.lng,
-      missao,
-      tempo,
-      marcador: pontoAtual.marcador
-    };
-
-    pontoGravado.marcador.bindPopup(`
-      📍 Ponto ${pontoGravado.id}<br>
-      Missão: ${missao}<br>
-      Lat: ${pontoGravado.lat.toFixed(6)}<br>
-      Lng: ${pontoGravado.lng.toFixed(6)}<br>
-      ⏱️ Tempo: ${tempo}
-    `);
-
-    pontos.push(pontoGravado);
-
-    pontoAtual = null;
-
-    alert("✅ Ponto gravado com sucesso!");
-  });
-
-  // =========================
-  // FINALIZAR MISSÃO
-  // =========================
-  btnFinalizar.addEventListener("click", () => {
-    if (pontos.length === 0) {
-      alert("Nenhum ponto registrado.");
-      return;
-    }
-
-    alert(`Missão finalizada com ${pontos.length} pontos.`);
-  });
-
+  console.log("Registros técnicos:", registrosDoPontoAtual);
 });
