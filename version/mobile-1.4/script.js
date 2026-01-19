@@ -60,15 +60,13 @@ let pontoAtivo = null;
   });
 
   map.on("locationfound", (e) => {
-    if (userMarker) map.removeLayer(userMarker);
-    userMarker = L.circleMarker(e.latlng, {
-      radius: 8,
-      color: "#1e90ff",
-      fillColor: "#1e90ff",
-      fillOpacity: 0.9
-    }).addTo(map);
-  });
 
+  // cria o ponto ativo
+  pontoAtivo = {
+    latlng: e.latlng,
+    dataHoraInicio: new Date(),
+    registros: []
+  };
   map.on("locationerror", () => {
     alert("Não foi possível acessar o GPS.");
   });
