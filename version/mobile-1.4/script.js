@@ -18,19 +18,17 @@ const btnGravar = document.getElementById("btnGravarPonto");
 const btnAdicionarRegistro = document.getElementById("btnAdicionarRegistro");
 
 const registroArea = document.getElementById("registroIndividuos");
+
+// Container da lista de registros
 const listaRegistros = document.createElement("div");
 registroArea.appendChild(listaRegistros);
 
-// Campos do formulário
+// Campos do formulário técnico
 const individuoInput = document.getElementById("individuoInput");
 const especieInput = document.getElementById("especieInput");
 const faseSelect = document.getElementById("faseSelect");
 const quantidadeInput = document.getElementById("quantidadeInput");
-if (btnAdicionarRegistro) {
-  btnAdicionarRegistro.addEventListener("click", () => {
-    // código
-  });
-}
+
 // ===============================
 // DADOS
 // ===============================
@@ -44,7 +42,9 @@ btnMarcar.addEventListener("click", () => {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
 
-    if (pontoAtual) map.removeLayer(pontoAtual);
+    if (pontoAtual) {
+      map.removeLayer(pontoAtual);
+    }
 
     pontoAtual = L.marker([lat, lng]).addTo(map);
     map.setView([lat, lng], 17);
@@ -60,86 +60,88 @@ btnMarcar.addEventListener("click", () => {
 // ===============================
 // ADICIONAR REGISTRO (EMPILHAR)
 // ===============================
-btnAdicionarRegistro.addEventListener("click", () => {
-  const index = registrosDoPontoAtual.length - 1;
+if (btnAdicionarRegistro) {
+  btnAdicionarRegistro.addEventListener("click", () => {
+    const individuo = individuoInput.value.trim();
+    const especie = especieInput.value.trim();
+    const fase = faseSelect.value;
+    const quantidade = quantidadeInput.value.trim();
 
-const item = document.createElement("div");
-item.style.borderBottom = "1px solid #ccc";
-item.style.padding = "6px 0";
+    if (!individuo || !especie || !quantidade) {
+      alert("Preencha todos os campos do registro técnico");
+      return;
+    }
 
-item.innerHTML = `
-  <strong>${individuo}</strong> – ${especie}<br>
-  Fase: ${fase} | Qtde: ${quantidade}
-  <div style="margin-top:4px;">
-    <button class="btn-editar">✏️ Editar</button>
-    <button class="btn-excluir">🗑 Excluir</button>
-  </div>
-`;
-  // BOTÃO EXCLUIR
-item.querySelector(".btn-excluir").addEventListener("click", () => {
-  registrosDoPontoAtual.splice(index, 1);
-  item.remove();
-});
+    const registro = {
+      individuo,
+      especie,
+      fase,
+      quantidade,
+    };
 
-// BOTÃO EDITAR
-item.querySelector(".btn-editar").addEventListener("click", () => {
-  const registro = registrosDoPontoAtual[index];
+    registrosDoPontoAtual.push(registro);
 
-  individuoInput.value = registro.individuo;
-  especieInput.value = registro.especie;
-  faseSelect.value = registro.fase;
-  quantidadeInput.value = registro.quantidade;
+    const index = registrosDoPontoAtual.length - 1;
 
-  registrosDoPontoAtual.splice(index, 1);
-  item.remove();
-});
-  
-  if (!individuo || !especie || !quantidade) {
-    alert("Preencha todos os campos do registro técnico");
-    return;
-  }
+    const item = document.createElement("div");
+    item.style.borderBottom = "1px solid #ccc";
+    item.style.padding = "6px 0";
 
-  const registro = {
-    individuo,
-    especie,
-    fase,
-    quantidade,
-  };
+    item.innerHTML = `
+      <strong>${individuo}</strong> – ${especie}<br>
+      Fase: ${fase || "-"} | Qtde: ${quantidade}
+      <div style="margin-top:4px;">
+        <button class="btn-editar">✏️ Editar</button>
+        <button class="btn-excluir">🗑 Excluir</button>
+      </div>
+    `;
 
-  registrosDoPontoAtual.push(registro);
+    // EXCLUIR REGISTRO
+    item.querySelector(".btn-excluir").addEventListener("click", () => {
+      registrosDoPontoAtual.splice(index, 1);
+      item.remove();
+    });
 
-  // Mostrar na lista
-  const item = document.createElement("div");
-  item.style.borderBottom = "1px solid #ccc";
-  item.style.padding = "4px 0";
-  item.innerHTML = `
-    <strong>${individuo}</strong> – ${especie}<br>
-    Fase: ${fase} | Qtde: ${quantidade}
-  `;
+    // EDITAR REGISTRO
+    item.querySelector(".btn-editar").addEventListener("click", () => {
+      const r = registrosDoPontoAtual[index];
 
-  listaRegistros.appendChild(item);
+      individuoInput.value = r.individuo;
+      especieInput.value = r.especie;
+      faseSelect.value = r.fase;
+      quantidadeInput.value = r.quantidade;
 
-  // Limpar formulário (ponto-chave do seu pedido)
-  individuoInput.value = "";
-  especieInput.value = "";
-  quantidadeInput.value = "";
-  faseSelect.selectedIndex = 0;
-});
+      registrosDoPontoAtual.splice(index, 1);
+      item.remove();
+    });
+
+    listaRegistros.appendChild(item);
+
+    // Limpa formulário para novo registro
+    individuoInput.value = "";
+    especieInput.value = "";
+    quantidadeInput.value = "";
+    faseSelect.selectedIndex = 0;
+  });
+}
 
 // ===============================
 // GRAVAR PONTO
 // ===============================
 btnGravar.addEventListener("click", () => {
-  if (!pontoAtual) return;
+  if (!pontoAtual) {
+    alert("Nenhum ponto marcado.");
+    return;
+  }
 
   const fimPonto = new Date();
   const tempoMin = Math.round((fimPonto - inicioPonto) / 60000);
 
   alert(
     `PONTO GRAVADO\n\n` +
-      `Registros: ${registrosDoPontoAtual.length}\n` +
+      `Registros técnicos: ${registrosDoPontoAtual.length}\n` +
       `Tempo no ponto: ${tempoMin} min`
   );
 
-  console.log("Registros técnicos:", registrosDoPontoAtual);
+  console.log("Registros técnicos do ponto:", registrosDoPontoAtual);
 });
