@@ -142,35 +142,38 @@ map.on("locationfound", (e) => {
   // ===============================
   // ADICIONAR REGISTRO
   // ===============================
-  btnAdicionar.addEventListener("click", () => {
+btnAdicionar.addEventListener("click", () => {
 
-    const individuo = individuoInput.value.trim();
-    const especie = especieInput.value.trim();
-    const fase = faseSelect.value;
-    const quantidade = quantidadeInput.value.trim();
+  const individuo = individuoInput.value.trim();
+  const especie = especieInput.value.trim();
+  const fase = faseSelect.value;
+  const quantidade = quantidadeInput.value.trim();
 
-    if (!individuo || !especie || !quantidade) {
-      alert("Preencha todos os campos do registro técnico");
-      return;
-    }
+  if (!individuo || !especie || !quantidade) {
+    alert("Preencha todos os campos do registro técnico");
+    return;
+  }
 
-    registros.push({ individuo, especie, fase, quantidade });
+  const registro = { individuo, especie, fase, quantidade };
+  registros.push(registro);
 
-    const item = document.createElement("div");
-    item.style.borderBottom = "1px solid #ccc";
-    item.style.padding = "6px 0";
-    item.innerHTML = `
-      <strong>${individuo}</strong> – ${especie}<br>
-      Fase: ${fase || "-"} | Qtde: ${quantidade}
-    `;
+  const item = document.createElement("div");
+  item.style.borderBottom = "1px solid #ccc";
+  item.style.padding = "6px 0";
 
-    lista.appendChild(item);
+  item.innerHTML = `
+    <strong>${individuo}</strong> – ${especie}<br>
+    Fase: ${fase || "-"} | Qtde: ${quantidade}
+  `;
 
-    individuoInput.value = "";
-    especieInput.value = "";
-    quantidadeInput.value = "";
-    faseSelect.selectedIndex = 0;
-  });
+  lista.appendChild(item);
+
+  // limpa formulário
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+  faseSelect.selectedIndex = 0;
+});
 
   // ===============================
   // GRAVAR PONTO
