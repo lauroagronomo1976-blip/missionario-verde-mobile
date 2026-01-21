@@ -57,11 +57,39 @@ btnMarcar.addEventListener("click", () => {
 // ADICIONAR REGISTRO (EMPILHAR)
 // ===============================
 btnAdicionarRegistro.addEventListener("click", () => {
-  const individuo = individuoInput.value.trim();
-  const especie = especieInput.value.trim();
-  const fase = faseSelect.value;
-  const quantidade = quantidadeInput.value;
+  const index = registrosDoPontoAtual.length - 1;
 
+const item = document.createElement("div");
+item.style.borderBottom = "1px solid #ccc";
+item.style.padding = "6px 0";
+
+item.innerHTML = `
+  <strong>${individuo}</strong> – ${especie}<br>
+  Fase: ${fase} | Qtde: ${quantidade}
+  <div style="margin-top:4px;">
+    <button class="btn-editar">✏️ Editar</button>
+    <button class="btn-excluir">🗑 Excluir</button>
+  </div>
+`;
+  // BOTÃO EXCLUIR
+item.querySelector(".btn-excluir").addEventListener("click", () => {
+  registrosDoPontoAtual.splice(index, 1);
+  item.remove();
+});
+
+// BOTÃO EDITAR
+item.querySelector(".btn-editar").addEventListener("click", () => {
+  const registro = registrosDoPontoAtual[index];
+
+  individuoInput.value = registro.individuo;
+  especieInput.value = registro.especie;
+  faseSelect.value = registro.fase;
+  quantidadeInput.value = registro.quantidade;
+
+  registrosDoPontoAtual.splice(index, 1);
+  item.remove();
+});
+  
   if (!individuo || !especie || !quantidade) {
     alert("Preencha todos os campos do registro técnico");
     return;
