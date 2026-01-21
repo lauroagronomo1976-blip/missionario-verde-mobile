@@ -1,4 +1,5 @@
 let modoCriarPonto = false;
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
@@ -35,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLocate = document.getElementById("btnLocate");
 
   const registroArea = document.getElementById("registroIndividuos");
-
   const individuoInput = document.getElementById("individuoInput");
   const especieInput = document.getElementById("especieInput");
   const faseSelect = document.getElementById("faseSelect");
@@ -45,37 +45,34 @@ document.addEventListener("DOMContentLoaded", () => {
   registroArea.appendChild(lista);
 
   // ===============================
-  // MARCAR PONTO (CRIA PONTO)
+  // MARCAR PONTO
   // ===============================
   btnMarcar.addEventListener("click", () => {
+    modoCriarPonto = true;
     map.locate({ enableHighAccuracy: true });
   });
 
+  // ===============================
+  // MIRA (SÓ CENTRALIZA)
+  // ===============================
+  btnLocate.addEventListener("click", () => {
+    modoCriarPonto = false;
+    map.locate({ enableHighAccuracy: true });
+  });
+
+  // ===============================
+  // LOCALIZAÇÃO
+  // ===============================
   map.on("locationfound", (e) => {
-    map.on("locationfound", (e) => {
 
-  // 👉 SE NÃO ESTIVER EM MODO MARCAR, SÓ CENTRALIZA
-  if (!modoCriarPonto) {
-    map.setView(e.latlng, 17);
-    return;
-  }
+    // Apenas centraliza
+    if (!modoCriarPonto) {
+      map.setView(e.latlng, 17);
+      return;
+    }
 
-  // 👉 A PARTIR DAQUI: CRIA PONTO
-  modoCriarPonto = false;
-
-  if (pontoAtual) map.removeLayer(pontoAtual);
-
-  pontoAtual = L.marker(e.latlng).addTo(map);
-  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
-
-  map.setView(e.latlng, 17);
-
-  inicioPonto = new Date();
-  registrosDoPontoAtual = [];
-  listaRegistros.innerHTML = "";
-
-  registroArea.style.display = "block";
-});
+    // Criar novo ponto
+    modoCriarPonto = false;
 
     if (pontoAtual) map.removeLayer(pontoAtual);
 
@@ -92,14 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // MIRA (SÓ CENTRALIZA)
-  // ===============================
-  btnLocate.addEventListener("click", () => {
-  modoCriarPonto = false;
-  map.locate({ enableHighAccuracy: true });
-});
-
-  // ===============================
   // CAMADAS
   // ===============================
   btnLayers.addEventListener("click", () => {
@@ -114,55 +103,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // ADICIONAR REGISTRO (EMPILHAR)
+  // ADICIONAR REGISTRO
   // ===============================
   btnAdicionar.addEventListener("click", () => {
-    btnAdicionarRegistro.addEventListener("click", () => {
 
-  const individuo = individuoInput.value.trim();
-  const especie = especieInput.value.trim();
-  const fase = faseSelect.value;
-  const quantidade = quantidadeInput.value.trim();
-
-  if (!individuo || !especie || !quantidade) {
-    alert("Preencha todos os campos do registro técnico");
-    return;
-  }
-
-  const registro = { individuo, especie, fase, quantidade };
-  registrosDoPontoAtual.push(registro);
-
-  const item = document.createElement("div");
-  item.style.borderBottom = "1px solid #ccc";
-  item.style.padding = "6px 0";
-  item.innerHTML = `
-    <strong>${individuo}</strong> – ${especie}<br>
-    Fase: ${fase || "-"} | Qtde: ${quantidade}
-  `;
-
-  listaRegistros.appendChild(item);
-
-  individuoInput.value = "";
-  especieInput.value = "";
-  quantidadeInput.value = "";
-  faseSelect.selectedIndex = 0;
-});
     const individuo = individuoInput.value.trim();
     const especie = especieInput.value.trim();
     const fase = faseSelect.value;
     const quantidade = quantidadeInput.value.trim();
 
     if (!individuo || !especie || !quantidade) {
-      alert("Preencha todos os campos do registro");
+      alert("Preencha todos os campos do registro técnico");
       return;
     }
 
     registros.push({ individuo, especie, fase, quantidade });
 
     const item = document.createElement("div");
-    item.style.borderBottom = "1px solid #ddd";
+    item.style.borderBottom = "1px solid #ccc";
     item.style.padding = "6px 0";
-
     item.innerHTML = `
       <strong>${individuo}</strong> – ${especie}<br>
       Fase: ${fase || "-"} | Qtde: ${quantidade}
@@ -180,28 +139,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-  if (!pontoAtual) {
-    alert("Marque um ponto primeiro");
-    return;
-  }
 
-  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+    if (!pontoAtual) {
+      alert("Marque um ponto primeiro");
+      return;
+    }
 
-  pontoAtual.bindPopup(
-    `📍 Ponto gravado<br>
-     Registros: ${registrosDoPontoAtual.length}<br>
-     ⏱ ${tempoMin} min`
-  );
-
-  alert("Ponto gravado com sucesso!");
-});
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
        Registros: ${registros.length}<br>
        ⏱ ${tempoMin} min`
-    );
+    ).openPopup();
 
     alert("Ponto gravado com sucesso!");
     console.log("Registros:", registros);
