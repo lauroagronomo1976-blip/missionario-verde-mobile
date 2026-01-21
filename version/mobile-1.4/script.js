@@ -1,4 +1,5 @@
 let modoCriarPonto = false;
+let localizadorAtual = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -64,6 +65,42 @@ document.addEventListener("DOMContentLoaded", () => {
   // LOCALIZAÇÃO
   // ===============================
   map.on("locationfound", (e) => {
+map.on("locationfound", (e) => {
+
+  // 👉 bolinha azul (posição atual)
+  if (localizadorAtual) {
+    map.removeLayer(localizadorAtual);
+  }
+
+  localizadorAtual = L.circleMarker(e.latlng, {
+    radius: 6,
+    color: "#0066ff",
+    fillColor: "#3399ff",
+    fillOpacity: 0.9
+  }).addTo(map);
+
+  // 👉 apenas centraliza
+  if (!modoCriarPonto) {
+    map.setView(e.latlng, 17);
+    return;
+  }
+
+  // 👉 cria ponto
+  modoCriarPonto = false;
+
+  if (pontoAtual) map.removeLayer(pontoAtual);
+
+  pontoAtual = L.marker(e.latlng).addTo(map);
+  pontoAtual.bindPopup("📍 Ponto marcado (não gravado)").openPopup();
+
+  map.setView(e.latlng, 17);
+
+  inicioPonto = new Date();
+  registros = [];
+  lista.innerHTML = "";
+
+  registroArea.style.display = "block";
+});
 
     // Apenas centraliza
     if (!modoCriarPonto) {
