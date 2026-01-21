@@ -64,22 +64,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // LOCALIZAÇÃO
   // ===============================
-  map.on("locationfound", (e) => {
 map.on("locationfound", (e) => {
 
-  // 👉 bolinha azul (posição atual)
+  // 🔵 bolinha azul (posição atual)
   if (localizadorAtual) {
     map.removeLayer(localizadorAtual);
   }
 
   localizadorAtual = L.circleMarker(e.latlng, {
     radius: 6,
-    color: "#0066ff",
+    color: "#005eff",
     fillColor: "#3399ff",
     fillOpacity: 0.9
   }).addTo(map);
 
-  // 👉 apenas centraliza
+  // 👉 só centraliza (modo mira)
   if (!modoCriarPonto) {
     map.setView(e.latlng, 17);
     return;
