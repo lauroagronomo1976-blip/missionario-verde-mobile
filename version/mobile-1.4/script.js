@@ -1,3 +1,4 @@
+let modoCriarPonto = false;
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
