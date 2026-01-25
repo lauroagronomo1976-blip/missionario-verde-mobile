@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const especieInput = document.getElementById("especieInput");
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
+  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
 
   // ===============================
   // STORAGE
@@ -126,28 +127,30 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!pontoAtual) {
       alert("Marque um ponto antes de adicionar registros");
       return;
+      ocorrenciaSelect.selectedIndex = 0;
     }
-
+    const ocorrencia = ocorrenciaSelect.value;
     const individuo = individuoInput.value.trim();
     const especie = especieInput.value.trim();
     const fase = faseSelect.value;
     const quantidade = quantidadeInput.value.trim();
 
-    if (!individuo || !especie || !quantidade) {
+    if (!ocorrencia || !individuo || !especie || !quantidade) {
       alert("Preencha todos os campos do registro técnico");
       return;
     }
 
-    const registro = { individuo, especie, fase, quantidade };
+    const registro = { ocorrência, individuo, especie, fase, quantidade };
     registrosDoPontoAtual.push(registro);
 
     const item = document.createElement("div");
     item.style.borderBottom = "1px solid #ddd";
     item.style.padding = "6px 0";
     item.innerHTML = `
-      <strong>${individuo}</strong> – ${especie}<br>
+      <strong>${ocorrencia}</strong><br>
+      ${individuo} – ${especie}<br>
       Fase: ${fase || "-"} | Qtde: ${quantidade}
-    `;
+`;
 
     listaRegistros.appendChild(item);
 
