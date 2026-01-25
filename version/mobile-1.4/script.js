@@ -127,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!pontoAtual) {
       alert("Marque um ponto antes de adicionar registros");
       return;
-      ocorrenciaSelect.selectedIndex = 0;
     }
     const ocorrencia = ocorrenciaSelect.value;
     const individuo = individuoInput.value.trim();
@@ -140,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const registro = { ocorrência, individuo, especie, fase, quantidade };
+    const registro = { ocorrencia, individuo, especie, fase, quantidade };
     registrosDoPontoAtual.push(registro);
 
     const item = document.createElement("div");
@@ -158,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     especieInput.value = "";
     quantidadeInput.value = "";
     faseSelect.selectedIndex = 0;
+    ocorrenciaSelect.selectedIndex = 0;
   });
 
   // ===============================
