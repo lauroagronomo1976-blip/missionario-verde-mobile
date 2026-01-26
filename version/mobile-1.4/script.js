@@ -192,8 +192,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-    if (!pontoAtual) return;
+  if (!pontoAtual) return;
 
+  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+  const missao = carregarMissao();
+
+  missao.pontos.push({
+    lat: pontoAtual.getLatLng().lat,
+    lng: pontoAtual.getLatLng().lng,
+    tempoMin,
+    registros: registrosDoPontoAtual
+  });
+
+  salvarMissao(missao);
+
+  pontoAtual.bindPopup(
+    `📍 Ponto gravado<br>
+     ⏱ Duração: ${tempoMin} min<br>
+     📋 Registros: ${registrosDoPontoAtual.length}`
+  ).openPopup();
+
+  // limpar tudo
+  registrosDoPontoAtual = [];
+  indiceEdicao = null;
+
+  individuoInput.value = "";
+  especieInput.value = "";
+  quantidadeInput.value = "";
+  faseSelect.selectedIndex = 0;
+  ocorrenciaSelect.selectedIndex = 0;
+
+  listaRegistros.innerHTML = "";
+  registroArea.style.display = "none";
+
+  alert("Ponto gravado!");
+});
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
     const missao = carregarMissao();
 
