@@ -30,19 +30,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnGravarPonto");
-  const btnAdicionar = document.getElementById("btnAddRegistro");
-  const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
+  const btnLayers = document.getElementById("btnLayers");
+  const btnAdicionar = document.getElementById("btnAddRegistro");
+  const btnGravar = document.getElementById("btnGravarPonto");
 
   const registroArea = document.getElementById("registroIndividuos");
   const listaRegistros = document.getElementById("listaRegistros");
 
+  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
   const individuoInput = document.getElementById("individuoInput");
   const especieInput = document.getElementById("especieInput");
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
-  const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
 
   // ===============================
   // STORAGE
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // MARCAR PONTO
+  // MARCAR / LOCALIZAR
   // ===============================
   btnMarcar.addEventListener("click", () => {
     modoCriarPonto = true;
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ADICIONAR / EDITAR REGISTRO
   // ===============================
   btnAdicionar.addEventListener("click", () => {
+
     if (!pontoAtual) {
       alert("Marque um ponto antes");
       return;
@@ -178,11 +179,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (e.target.dataset.edit !== undefined) {
       const r = registrosDoPontoAtual[e.target.dataset.edit];
+
       ocorrenciaSelect.value = r.ocorrencia;
       individuoInput.value = r.individuo;
       especieInput.value = r.especie;
       faseSelect.value = r.fase;
       quantidadeInput.value = r.quantidade;
+
       indiceEdicao = e.target.dataset.edit;
       registroArea.style.display = "block";
     }
@@ -192,76 +195,35 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-  if (!pontoAtual) return;
 
-  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-  const missao = carregarMissao();
+    if (!pontoAtual) return;
 
-  missao.pontos.push({
-    lat: pontoAtual.getLatLng().lat,
-    lng: pontoAtual.getLatLng().lng,
-    tempoMin,
-    registros: registrosDoPontoAtual
+    const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+    const missao = carregarMissao();
+
+    missao.pontos.push({
+      lat: pontoAtual.getLatLng().lat,
+      lng: pontoAtual.getLatLng().lng,
+      tempoMin,
+      registros: registrosDoPontoAtual
+    });
+
+    salvarMissao(missao);
+
+    pontoAtual.bindPopup(
+      `📍 Ponto gravado<br>
+       ⏱ Duração: ${tempoMin} min<br>
+       📋 Registros: ${registrosDoPontoAtual.length}`
+    ).openPopup();
+
+    // limpar estado
+    registrosDoPontoAtual = [];
+    indiceEdicao = null;
+    registroArea.style.display = "none";
+    listaRegistros.innerHTML = "";
+    pontoAtual = null;
+
+    alert("Ponto gravado!");
   });
 
-  salvarMissao(missao);
-
-  pontoAtual.bindPopup(
-    `📍 Ponto gravado<br>
-     ⏱ Duração: ${tempoMin} min<br>
-     📋 Registros: ${registrosDoPontoAtual.length}`
-  ).openPopup();
-
-  // limpar tudo
-  registrosDoPontoAtual = [];
-  indiceEdicao = null;
-
-  individuoInput.value = "";
-  especieInput.value = "";
-  quantidadeInput.value = "";
-  faseSelect.selectedIndex = 0;
-  ocorrenciaSelect.selectedIndex = 0;
-
-  listaRegistros.innerHTML = "";
-  registroArea.style.display = "none";
-
-// ===============================
-// GRAVAR PONTO
-// ===============================
-btnGravar.addEventListener("click", () => {
-  if (!pontoAtual) return;
-
-  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-  const missao = carregarMissao();
-
-  missao.pontos.push({
-    lat: pontoAtual.getLatLng().lat,
-    lng: pontoAtual.getLatLng().lng,
-    tempoMin,
-    registros: registrosDoPontoAtual
-  });
-
-  salvarMissao(missao);
-
-  pontoAtual.bindPopup(
-    `📍 Ponto gravado<br>
-     ⏱ Duração: ${tempoMin} min<br>
-     📋 Registros: ${registrosDoPontoAtual.length}`
-  ).openPopup();
-
-  // limpar estado
-  registrosDoPontoAtual = [];
-  indiceEdicao = null;
-
-  individuoInput.value = "";
-  especieInput.value = "";
-  quantidadeInput.value = "";
-  faseSelect.selectedIndex = 0;
-  ocorrenciaSelect.selectedIndex = 0;
-
-  listaRegistros.innerHTML = "";
-  registroArea.style.display = "none";
-
-  alert("Ponto gravado!");
 });
-    
