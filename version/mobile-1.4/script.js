@@ -15,29 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     { maxZoom: 19 }
   );
 
-  let usandoSatelite = false;
-// ===============================
-// BOTÃO MIRA (LOCALIZAÇÃO)
-// ===============================
-btnLocate.addEventListener("click", () => {
-  modoCriarPonto = false; // apenas centraliza, não cria ponto
-  map.locate({ enableHighAccuracy: true });
-});
-
-// ===============================
-// BOTÃO CAMADAS
-// ===============================
-btnLayers.addEventListener("click", () => {
-  if (usandoSatelite) {
-    map.removeLayer(camadaSatelite);
-    camadaRua.addTo(map);
-  } else {
-    map.removeLayer(camadaRua);
-    camadaSatelite.addTo(map);
-  }
-  usandoSatelite = !usandoSatelite;
-});
-
   // ===============================
   // ESTADO
   // ===============================
