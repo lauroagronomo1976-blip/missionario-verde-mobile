@@ -182,6 +182,21 @@ document.addEventListener("DOMContentLoaded", () => {
     faseSelect.selectedIndex = 0;
     ocorrenciaSelect.selectedIndex = 0;
   });
+  
+// ===============================
+// EXIBIR REGISTROS (v1.4.1)
+// ===============================
+const btnExibir = document.getElementById("btnExibirRegistros");
+
+btnExibir.addEventListener("click", () => {
+  if (!registrosDoPontoAtual.length) {
+    alert("Não há registros para exibir neste ponto");
+    return;
+  }
+
+  registroArea.style.display = "block";
+  renderizarRegistros();
+});
 
   // ===============================
   // EDITAR / EXCLUIR DA LISTA
