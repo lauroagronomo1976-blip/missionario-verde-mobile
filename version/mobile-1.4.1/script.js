@@ -36,6 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
 
+    console.log("JS carregado");
+    console.log("btnGravar:", document.getElementById("btnGravarPonto"));
+    btnGravar.addEventListener("click", () => {
+    console.log("CLICOU EM GRAVAR");
+
   // ⚠️ botão Exibir só funciona se existir no HTML
   const btnExibir = document.getElementById("btnExibirRegistros");
 
