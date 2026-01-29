@@ -46,14 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
 
-  console.log("JS carregado corretamente");
+  console.log("✅ JS carregado corretamente");
 
   // ===============================
   // STORAGE
   // ===============================
   function carregarMissao() {
-    const dados = localStorage.getItem("missaoAtiva");
-    return dados ? JSON.parse(dados) : { pontos: [] };
+    return JSON.parse(localStorage.getItem("missaoAtiva")) || { pontos: [] };
   }
 
   function salvarMissao(missao) {
@@ -213,7 +212,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   if (btnExibir) {
     btnExibir.addEventListener("click", () => {
-      formularioVisivel ? esconderFormulario() : mostrarFormulario();
+      if (formularioVisivel) {
+        esconderFormulario();
+      } else {
+        mostrarFormulario();
+        renderizarRegistros();
+      }
     });
   }
 
@@ -221,8 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO  ✅
   // ===============================
   btnGravar.addEventListener("click", () => {
-
-    console.log("CLICOU EM GRAVAR");
 
     if (!pontoAtual) {
       alert("Nenhum ponto marcado");
@@ -243,8 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
-       ⏱ ${tempoMin} min<br>
-       📋 ${registrosDoPontoAtual.length} registros`
+       ⏱ Duração: ${tempoMin} min<br>
+       📋 Registros: ${registrosDoPontoAtual.length}`
     ).openPopup();
 
     pontoAtual = null;
