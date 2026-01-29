@@ -64,16 +64,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   function mostrarFormulario() {
   registroArea.style.display = "block";
-  listaRegistros.style.display = "block"; // 🔥 garante a lista
+  if (listaRegistros) listaRegistros.style.display = "block";
   formularioVisivel = true;
   }
 
   function esconderFormulario() {
   registroArea.style.display = "none";
-  listaRegistros.style.display = "none"; // 🔥 esconde junto
+  if (listaRegistros) listaRegistros.style.display = "none";
   formularioVisivel = false;
-  }
-
+}
   // ===============================
   // RENDER REGISTROS
   // ===============================
@@ -218,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
       esconderFormulario();
     } else {
       mostrarFormulario();
-      renderizarRegistros(); // 👈 força render sempre
+      renderizarRegistros();
     }
   });
 }
