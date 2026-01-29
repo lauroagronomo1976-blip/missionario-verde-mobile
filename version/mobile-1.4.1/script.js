@@ -28,20 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let formularioVisivel = false;
 
   // ===============================
-  // ELEMENTOS (100% alinhados ao HTML)
+  // ELEMENTOS
   // ===============================
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnGravar = document.getElementById("btnGravarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
-
-    console.log("JS carregado");
-    console.log("btnGravar:", document.getElementById("btnGravarPonto"));
-    btnGravar.addEventListener("click", () => {
-    console.log("CLICOU EM GRAVAR");
-
-  // ⚠️ botão Exibir só funciona se existir no HTML
   const btnExibir = document.getElementById("btnExibirRegistros");
 
   const registroArea = document.getElementById("registroIndividuos");
@@ -52,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
+
+  console.log("JS carregado corretamente");
 
   // ===============================
   // STORAGE
@@ -153,9 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // ADICIONAR / EDITAR REGISTRO
+  // ADICIONAR REGISTRO
   // ===============================
   btnAdicionar.addEventListener("click", () => {
+
     if (!pontoAtual) {
       alert("Marque um ponto antes");
       return;
@@ -194,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // EDITAR / EXCLUIR
   // ===============================
   listaRegistros.addEventListener("click", (e) => {
+
     if (e.target.dataset.del !== undefined) {
       registrosDoPontoAtual.splice(e.target.dataset.del, 1);
       renderizarRegistros();
@@ -212,23 +209,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // EXIBIR / OCULTAR (se existir botão)
+  // EXIBIR / OCULTAR
   // ===============================
   if (btnExibir) {
     btnExibir.addEventListener("click", () => {
-      if (formularioVisivel) {
-        esconderFormulario();
-      } else {
-        mostrarFormulario();
-        renderizarRegistros();
-      }
+      formularioVisivel ? esconderFormulario() : mostrarFormulario();
     });
   }
 
   // ===============================
-  // GRAVAR PONTO  ✅ AGORA GRAVA
+  // GRAVAR PONTO  ✅
   // ===============================
   btnGravar.addEventListener("click", () => {
+
+    console.log("CLICOU EM GRAVAR");
+
     if (!pontoAtual) {
       alert("Nenhum ponto marcado");
       return;
@@ -248,11 +243,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
-       ⏱ Duração: ${tempoMin} min<br>
-       📋 Registros: ${registrosDoPontoAtual.length}`
+       ⏱ ${tempoMin} min<br>
+       📋 ${registrosDoPontoAtual.length} registros`
     ).openPopup();
 
-    // reset
     pontoAtual = null;
     registrosDoPontoAtual = [];
     indiceEdicao = null;
