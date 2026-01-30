@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
 
-  console.log("✅ JS carregado corretamente");
+  console.log("✅ JS carregado sem erros");
 
   // ===============================
   // STORAGE
@@ -63,16 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // FORMULÁRIO
   // ===============================
   function mostrarFormulario() {
-  registroArea.style.display = "block";
-  if (listaRegistros) listaRegistros.style.display = "block";
-  formularioVisivel = true;
+    registroArea.style.display = "block";
+    listaRegistros.style.display = "block";
+    formularioVisivel = true;
   }
 
   function esconderFormulario() {
-  registroArea.style.display = "none";
-  if (listaRegistros) listaRegistros.style.display = "none";
-  formularioVisivel = false;
-}
+    registroArea.style.display = "none";
+    listaRegistros.style.display = "none";
+    formularioVisivel = false;
+  }
+
   // ===============================
   // RENDER REGISTROS
   // ===============================
@@ -93,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button data-del="${index}">🗑</button>
         </div>
       `;
+
       listaRegistros.appendChild(item);
     });
   }
@@ -198,11 +200,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (e.target.dataset.edit !== undefined) {
       const r = registrosDoPontoAtual[e.target.dataset.edit];
+
       ocorrenciaSelect.value = r.ocorrencia;
       individuoInput.value = r.individuo;
       especieInput.value = r.especie;
       faseSelect.value = r.fase;
       quantidadeInput.value = r.quantidade;
+
       indiceEdicao = e.target.dataset.edit;
       mostrarFormulario();
     }
@@ -211,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // EXIBIR / OCULTAR
   // ===============================
-  if (btnExibir) {
   btnExibir.addEventListener("click", () => {
     if (formularioVisivel) {
       esconderFormulario();
@@ -220,16 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
       renderizarRegistros();
     }
   });
-}
-      // 🔥 força exibir a lista sempre
-      listaRegistros.style.display = "block";
-      renderizarRegistros();
-    }
-  });
-}
 
-// ===============================
-  // GRAVAR PONTO  ✅
+  // ===============================
+  // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
 
@@ -252,13 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
-       📋 Registros: ${registrosDoPontoAtual.length}`
-       ⏱ Duração: ${tempoMin} min<br>
-           ).openPopup();
+        📋 ${registrosDoPontoAtual.length} registros`
+        ⏱ ${tempoMin} min<br>
+    ).openPopup();
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
     indiceEdicao = null;
+
     esconderFormulario();
     listaRegistros.innerHTML = "";
 
