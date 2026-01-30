@@ -252,9 +252,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pontoAtual.bindPopup(
       `📍 Ponto gravado<br>
-       ⏱ Duração: ${tempoMin} min<br>
        📋 Registros: ${registrosDoPontoAtual.length}`
-    ).openPopup();
+       ⏱ Duração: ${tempoMin} min<br>
+           ).openPopup();
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
