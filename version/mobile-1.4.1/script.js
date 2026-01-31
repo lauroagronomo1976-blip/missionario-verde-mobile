@@ -247,10 +247,10 @@ document.addEventListener("DOMContentLoaded", () => {
     salvarMissao(missao);
 
     pontoAtual.bindPopup(
-      `📍 Ponto gravado<br>
-       📋 ${registrosDoPontoAtual.length} registros`
-       ⏱ ${tempoMin} min<br>
-    ).openPopup();
+  `📍 Ponto gravado<br>
+   ⏱ ${tempoMin} min<br>
+   📋 ${registrosDoPontoAtual.length} registros`
+).openPopup();
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
