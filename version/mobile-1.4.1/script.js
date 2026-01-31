@@ -251,12 +251,11 @@ btnExibir.addEventListener("click", () => {
    📋 ${registrosDoPontoAtual.length} registros`
 ).openPopup();
 
-    pontoAtual = null;
-    registrosDoPontoAtual = [];
     indiceEdicao = null;
 
-    esconderFormulario();
-    listaRegistros.innerHTML = "";
+// mantém os registros para visualização
+mostrarFormulario();
+renderizarRegistros();
 
     alert("Ponto gravado com sucesso!");
   });
