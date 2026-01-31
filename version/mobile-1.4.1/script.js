@@ -44,9 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
-
+  const blocoRegistro = document.getElementById("blocoRegistroTecnico");
+  
   console.log("✅ JS carregado sem erros");
-
+    
   // ===============================
   // STORAGE
   // ===============================
@@ -62,14 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // FORMULÁRIO
   // ===============================
   function mostrarFormulario() {
-  registroArea.style.display = "block";
-  listaRegistros.style.display = "block";
+  blocoRegistro.style.display = "block";
   formularioVisivel = true;
 }
 
 function esconderFormulario() {
-  registroArea.style.display = "none";
-  listaRegistros.style.display = "none";
+  blocoRegistro.style.display = "none";
   formularioVisivel = false;
 }
 
