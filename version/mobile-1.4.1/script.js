@@ -20,11 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // ESTADO
   // ===============================
-  let pontoAtual = null;
-  let inicioPonto = null;
-  let modoCriarPonto = false;
-  let indiceEdicao = null;
-  let formularioVisivel = false;
+  pontoAtual = null;
+  inicioPonto = null;
+  registrosDoPontoAtual = [];
+  indiceEdicao = null;
+
+  registroArea.style.display = "none";
+  listaRegistros.innerHTML = "";
+  formularioVisivel = false;
 
   // ===============================
   // ELEMENTOS
