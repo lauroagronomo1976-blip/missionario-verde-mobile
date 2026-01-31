@@ -216,19 +216,13 @@ function esconderFormulario() {
 // EXIBIR / OCULTAR (FORM + LISTA)
 // ===============================
 btnExibir.addEventListener("click", () => {
-
   if (formularioVisivel) {
-    // esconde tudo
     esconderFormulario();
-    listaRegistros.style.display = "none";
   } else {
-    // mostra tudo
     mostrarFormulario();
-    listaRegistros.style.display = "block";
     renderizarRegistros();
   }
 });
-
   // ===============================
   // GRAVAR PONTO
   // ===============================
