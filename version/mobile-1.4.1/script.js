@@ -26,13 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
   map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
 });
 
-  /* ================= ELEMENTOS ================= */
-  const btnMarcar = document.getElementById("btnMarcarPonto");
-  const btnGravar = document.getElementById("btnGravarPonto");
+  // ===============================
+  // ELEMENTOS
+  // ===============================
+  const btnMarcar   = document.getElementById("btnMarcarPonto");
+  const btnGravar   = document.getElementById("btnGravarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
-  const btnExibir = document.getElementById("btnExibirRegistros");
-  const btnLayers = document.getElementById("btnLayers");
-  const btnLocate = document.getElementById("btnLocate");
+  const btnExibir   = document.getElementById("btnExibirRegistros");
+  const btnLayers   = document.getElementById("btnLayers");
+  const btnLocate   = document.getElementById("btnLocate");
 
   const registroArea = document.getElementById("registroIndividuos");
   const listaRegistros = document.getElementById("listaRegistros");
@@ -42,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
-
+  
   /* ================= UI ================= */
   function mostrarFormulario() {
     registroArea.style.display = "block";
