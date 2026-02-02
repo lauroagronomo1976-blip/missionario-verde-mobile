@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===============================
-  // MAPA
-  // ===============================
+  console.log("✅ JS carregado sem erros");
+
+  /* ================= MAPA ================= */
   const map = L.map("map").setView([-15.78, -47.93], 5);
 
   const camadaRua = L.tileLayer(
@@ -17,27 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let usandoSatelite = false;
 
-  // ===============================
-  // ESTADO
-  // ===============================
-  pontoAtual = null;
-  inicioPonto = null;
-  registrosDoPontoAtual = [];
-  indiceEdicao = null;
+  /* ================= ESTADO ================= */
+  let pontoAtual = null;
+  let inicioPonto = null;
+  let registrosDoPontoAtual = [];
+  let modoCriarPonto = false;
 
-  registroArea.style.display = "none";
-  listaRegistros.innerHTML = "";
-  formularioVisivel = false;
-
-  // ===============================
-  // ELEMENTOS
-  // ===============================
+  /* ================= ELEMENTOS ================= */
   const btnMarcar = document.getElementById("btnMarcarPonto");
   const btnGravar = document.getElementById("btnGravarPonto");
   const btnAdicionar = document.getElementById("btnAddRegistro");
+  const btnExibir = document.getElementById("btnExibirRegistros");
   const btnLayers = document.getElementById("btnLayers");
   const btnLocate = document.getElementById("btnLocate");
-  const btnExibir = document.getElementById("btnExibirRegistros");
 
   const registroArea = document.getElementById("registroIndividuos");
   const listaRegistros = document.getElementById("listaRegistros");
@@ -47,83 +39,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
   const ocorrenciaSelect = document.getElementById("ocorrenciaSelect");
-  const blocoRegistro = document.getElementById("blocoRegistroTecnico");
-  
-  console.log("✅ JS carregado sem erros");
-    
-  // ===============================
-  // STORAGE
-  // ===============================
-  function carregarMissao() {
-    return JSON.parse(localStorage.getItem("missaoAtiva")) || { pontos: [] };
-  }
 
-  function salvarMissao(missao) {
-    localStorage.setItem("missaoAtiva", JSON.stringify(missao));
-  }
-
-  // ===============================
-  // FORMULÁRIO
-  // ===============================
+  /* ================= UI ================= */
   function mostrarFormulario() {
-  registroArea.style.display = "block";
-  listaRegistros.style.display = "block";
-  formularioVisivel = true;
-}
+    registroArea.style.display = "block";
+    listaRegistros.style.display = "block";
+  }
+
   function esconderFormulario() {
-  registroArea.style.display = "none";
-  listaRegistros.style.display = "none";
-  formularioVisivel = false;
-}
-  // ===============================
-  // RENDER REGISTROS
-  // ===============================
+    registroArea.style.display = "none";
+    listaRegistros.style.display = "none";
+  }
+
+  /* ================= RENDER ================= */
   function renderizarRegistros() {
-    
+    listaRegistros.innerHTML = "";
 
-    registrosDoPontoAtual.forEach((r, index) => {
-      const item = document.createElement("div");
-      item.style.borderBottom = "1px solid #ddd";
-      item.style.padding = "6px";
+    registrosDoPontoAtual.forEach((r, i) => {
+      const div = document.createElement("div");
+      div.style.borderBottom = "1px solid #ccc";
+      div.style.padding = "6px";
 
-      item.innerHTML = `
+      div.innerHTML = `
         <strong>${r.ocorrencia}</strong><br>
         ${r.individuo} – ${r.especie}<br>
-        Fase: ${r.fase || "-"} | Qtde: ${r.quantidade}
-        <div style="margin-top:4px">
-          <button data-edit="${index}">✏️</button>
-          <button data-del="${index}">🗑</button>
-        </div>
+        Fase: ${r.fase} | Qtde: ${r.quantidade}
       `;
 
-      listaRegistros.appendChild(item);
+      listaRegistros.appendChild(div);
     });
   }
 
-  // ===============================
-  // MARCAR PONTO
-  // ===============================
-  if (!btnMarcar) {
-  console.error("❌ Botão Marcar Ponto não encontrado");
-  return;
-}
+  /* ================= MARCAR PONTO ================= */
   btnMarcar.addEventListener("click", () => {
-    console.log("📍 Clique em Marcar Ponto");
     modoCriarPonto = true;
     map.locate({ enableHighAccuracy: true });
   });
 
-  btnLocate.addEventListener("click", () => {
-    modoCriarPonto = false;
-    map.locate({ enableHighAccuracy: true });
-  });
-
   map.on("locationfound", (e) => {
-
-    if (!modoCriarPonto) {
-      map.setView(e.latlng, 17);
-      return;
-    }
+    if (!modoCriarPonto) return;
 
     modoCriarPonto = false;
 
@@ -134,16 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     inicioPonto = new Date();
     registrosDoPontoAtual = [];
-    indiceEdicao = null;
 
     mostrarFormulario();
-    renderizarRegistros();
     map.setView(e.latlng, 17);
   });
 
-  // ===============================
-  // CAMADAS
-  // ===============================
+  /* ================= CAMADAS ================= */
   btnLayers.addEventListener("click", () => {
     if (usandoSatelite) {
       map.removeLayer(camadaSatelite);
@@ -155,131 +105,53 @@ document.addEventListener("DOMContentLoaded", () => {
     usandoSatelite = !usandoSatelite;
   });
 
-  // ===============================
-  // ADICIONAR REGISTRO
-  // ===============================
+  /* ================= REGISTROS ================= */
   btnAdicionar.addEventListener("click", () => {
-
     if (!pontoAtual) {
       alert("Marque um ponto antes");
       return;
     }
 
-    const registro = {
+    const r = {
       ocorrencia: ocorrenciaSelect.value,
-      individuo: individuoInput.value.trim(),
-      especie: especieInput.value.trim(),
+      individuo: individuoInput.value,
+      especie: especieInput.value,
       fase: faseSelect.value,
       quantidade: quantidadeInput.value
     };
 
-    if (!registro.ocorrencia || !registro.individuo || !registro.especie || registro.quantidade === "") {
-      alert("Preencha todos os campos");
-      return;
-    }
-
-    if (indiceEdicao !== null) {
-      registrosDoPontoAtual[indiceEdicao] = registro;
-      indiceEdicao = null;
-    } else {
-      registrosDoPontoAtual.push(registro);
-    }
-
+    registrosDoPontoAtual.push(r);
     renderizarRegistros();
 
     individuoInput.value = "";
     especieInput.value = "";
     quantidadeInput.value = "";
-    faseSelect.selectedIndex = 0;
-    ocorrenciaSelect.selectedIndex = 0;
   });
 
-  // ===============================
-  // EDITAR / EXCLUIR
-  // ===============================
-  listaRegistros.addEventListener("click", (e) => {
+  btnExibir.addEventListener("click", () => {
+    listaRegistros.style.display =
+      listaRegistros.style.display === "none" ? "block" : "none";
+  });
 
-    if (e.target.dataset.del !== undefined) {
-      registrosDoPontoAtual.splice(e.target.dataset.del, 1);
-      renderizarRegistros();
+  /* ================= GRAVAR ================= */
+  btnGravar.addEventListener("click", () => {
+    if (!pontoAtual) {
+      alert("Nenhum ponto marcado");
+      return;
     }
 
-    if (e.target.dataset.edit !== undefined) {
-      const r = registrosDoPontoAtual[e.target.dataset.edit];
-
-      ocorrenciaSelect.value = r.ocorrencia;
-      individuoInput.value = r.individuo;
-      especieInput.value = r.especie;
-      faseSelect.value = r.fase;
-      quantidadeInput.value = r.quantidade;
-
-      indiceEdicao = e.target.dataset.edit;
-      mostrarFormulario();
-    }
-  });
-
-  // ===============================
-// EXIBIR / OCULTAR (FORM + LISTA)
-// ===============================
-btnExibir.addEventListener("click", () => {
-  if (formularioVisivel) {
-    esconderFormulario();
-  } else {
-    mostrarFormulario();
-    renderizarRegistros();
-  }
-});
-  // ===============================
-// GRAVAR PONTO
-// ===============================
-btnGravar.addEventListener("click", () => {
-
-  if (!pontoAtual) {
-    alert("Nenhum ponto marcado");
-    return;
-  }
-
-  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-  const missao = carregarMissao();
-
-  missao.pontos.push({
-    lat: pontoAtual.getLatLng().lat,
-    lng: pontoAtual.getLatLng().lng,
-    tempoMin,
-    registros: [...registrosDoPontoAtual]
-  });
-
-  salvarMissao(missao);
-
-  pontoAtual.bindPopup(
-    `📍 Ponto gravado<br>
-     📋 ${registrosDoPontoAtual.length} registros<br>
-     ⏱ ${tempoMin} min`
-  ).openPopup();
-
-  pontoAtual = null;
-  registrosDoPontoAtual = [];
-  indiceEdicao = null;
-
-  esconderFormulario();
-  listaRegistros.innerHTML = "";
-
-  alert("Ponto gravado com sucesso!");
-});
-
-    salvarMissao(missao);
+    const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
 
     pontoAtual.bindPopup(
-  `📍 Ponto gravado<br>
-   ⏱ ${tempoMin} min<br>
-   📋 ${registrosDoPontoAtual.length} registros`
-).openPopup();
+      `📍 Ponto gravado<br>
+       📋 ${registrosDoPontoAtual.length} registros<br>
+       ⏱ ${tempoMin} min`
+    ).openPopup();
 
-    indiceEdicao = null;
-
-// mantém os registros para visualização
-mostrarFormulario();
-renderizarRegistros();
+    pontoAtual = null;
+    registrosDoPontoAtual = [];
+    esconderFormulario();
 
     alert("Ponto gravado com sucesso!");
   });
+
