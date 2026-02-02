@@ -21,7 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let pontoAtual = null;
   let inicioPonto = null;
   let registrosDoPontoAtual = [];
-  let modoCriarPonto = false;
+  btnLocate.addEventListener("click", () => {
+  modoCriarPonto = false;
+  map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
+});
 
   /* ================= ELEMENTOS ================= */
   const btnMarcar = document.getElementById("btnMarcarPonto");
@@ -72,10 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= MARCAR PONTO ================= */
   btnMarcar.addEventListener("click", () => {
-    modoCriarPonto = true;
-    map.locate({ enableHighAccuracy: true });
-  });
-
+  modoCriarPonto = true;
+  mostrarFormulario();
+  renderizarRegistros();
+  map.locate({ enableHighAccuracy: true });
+});
   map.on("locationfound", (e) => {
     if (!modoCriarPonto) return;
 
@@ -135,10 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================= GRAVAR ================= */
   btnGravar.addEventListener("click", () => {
-    if (!pontoAtual) {
-      alert("Nenhum ponto marcado");
-      return;
-    }
+    if (registrosDoPontoAtual.length === 0) {
+  alert("Adicione ao menos um registro antes de gravar o ponto");
+  return;
+}
 
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
 
