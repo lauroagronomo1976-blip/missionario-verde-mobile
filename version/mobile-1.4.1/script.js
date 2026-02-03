@@ -1,3 +1,4 @@
+alert("ESTE É O JS DA VERSÃO 1.4.1");
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ JS carregado sem erros");
 
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let indiceEdicao = null;
   let modoCriarPonto = false;
   let formularioVisivel = false;
+  let indicePontoEmEdicao = null;
 
   // ===============================
   // FORMULÁRIO
