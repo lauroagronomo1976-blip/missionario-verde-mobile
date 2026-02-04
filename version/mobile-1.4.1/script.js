@@ -212,10 +212,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // EXIBIR / OCULTAR
 // ===============================
 btnExibir.addEventListener("click", () => {
+  formularioVisivel = !formularioVisivel;
+
   if (formularioVisivel) {
-    esconderFormulario();
+    registroArea.style.display = "block";
+    listaRegistros.style.display = "block";
+    renderizarRegistros();
   } else {
-    mostrarFormulario();
+    registroArea.style.display = "none";
+    listaRegistros.style.display = "none";
+  }
+});
 
     // garante que a lista apareça sempre junto
     listaRegistros.style.display = "block";
