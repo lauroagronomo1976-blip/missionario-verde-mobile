@@ -1,4 +1,5 @@
 console.log("🟢 JS CONFIRMADO – ESTE É O ARQUIVO ATIVO");
+
 // ===============================
 // STORAGE
 // ===============================
@@ -9,6 +10,7 @@ function carregarMissao() {
 function salvarMissao(missao) {
   localStorage.setItem("missaoAtiva", JSON.stringify(missao));
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ JS carregado sem erros");
 
@@ -57,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let indiceEdicao = null;
   let modoCriarPonto = false;
   let formularioVisivel = false;
-  let indicePontoEmEdicao = null;
 
   // ===============================
   // FORMULÁRIO
@@ -74,11 +75,18 @@ document.addEventListener("DOMContentLoaded", () => {
     formularioVisivel = false;
   }
 
+  esconderFormulario();
+
   // ===============================
-  // RENDERIZA REGISTROS
+  // RENDERIZAR REGISTROS
   // ===============================
   function renderizarRegistros() {
     listaRegistros.innerHTML = "";
+
+    if (!registrosDoPontoAtual.length) {
+      listaRegistros.innerHTML = "<p style='opacity:.6'>Nenhum registro</p>";
+      return;
+    }
 
     registrosDoPontoAtual.forEach((r, index) => {
       const div = document.createElement("div");
@@ -186,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ===============================
-  // EDITAR / EXCLUIR
+  // EDITAR / EXCLUIR REGISTRO
   // ===============================
   listaRegistros.addEventListener("click", (e) => {
     if (e.target.dataset.del !== undefined) {
@@ -208,68 +216,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-    // ===============================
-// EXIBIR / OCULTAR
-// ===============================
-btnExibir.addEventListener("click", () => {
-  formularioVisivel = !formularioVisivel;
-
-  if (btnExibir && registroArea && listaRegistros) {
+  // ===============================
+  // EXIBIR / OCULTAR
+  // ===============================
   btnExibir.addEventListener("click", () => {
-    formularioVisivel = !formularioVisivel;
-
-    if (formularioVisivel) {
-      registroArea.style.display = "block";
-      listaRegistros.style.display = "block";
-      renderizarRegistros();
-    } else {
-      registroArea.style.display = "none";
-      listaRegistros.style.display = "none";
-    }
-  });
-}
-
-    // garante que a lista apareça sempre junto
-    listaRegistros.style.display = "block";
+    formularioVisivel ? esconderFormulario() : mostrarFormulario();
     renderizarRegistros();
-  }
-});
-  
-// ===============================
-// LISTAR TODOS OS PONTOS DA MISSÃO
-// ===============================
-function renderizarPontosSalvos() {
-  const missao = carregarMissao();
-
-  listaRegistros.innerHTML = "";
-
-  if (!missao.pontos.length) {
-    listaRegistros.innerHTML = "<p>Nenhum ponto gravado.</p>";
-    return;
-  }
-
-  missao.pontos.forEach((ponto, index) => {
-    const item = document.createElement("div");
-    item.style.borderBottom = "1px solid #ccc";
-    item.style.padding = "8px";
-    item.style.cursor = "pointer";
-
-    item.innerHTML = `
-      <strong>📍 Ponto ${index + 1}</strong><br>
-      ⏱ ${ponto.tempoMin} min<br>
-      📋 ${ponto.registros.length} registros
-    `;
-
-    item.addEventListener("click", () => {
-      registrosDoPontoAtual = [...ponto.registros];
-      indiceEdicao = null;
-      mostrarFormulario();
-      renderizarRegistros();
-    });
-
-    listaRegistros.appendChild(item);
   });
-}
+
   // ===============================
   // GRAVAR PONTO
   // ===============================
@@ -280,20 +234,28 @@ function renderizarPontosSalvos() {
     }
 
     const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+    const missao = carregarMissao();
+
+    missao.pontos.push({
+      lat: pontoAtual.getLatLng().lat,
+      lng: pontoAtual.getLatLng().lng,
+      tempoMin,
+      registros: [...registrosDoPontoAtual]
+    });
+
+    salvarMissao(missao);
 
     pontoAtual.bindPopup(
-  `📍 Ponto gravado<br>
-   📋 ${registrosDoPontoAtual.length} registros<br>
-   ⏱ ${tempoMin} min`
-).openPopup();
+      `📍 Ponto gravado<br>
+       📋 ${registrosDoPontoAtual.length} registros<br>
+       ⏱ ${tempoMin} min`
+    ).openPopup();
 
     pontoAtual = null;
     registrosDoPontoAtual = [];
     indiceEdicao = null;
 
     esconderFormulario();
-    listaRegistros.innerHTML = "";
-
     alert("Ponto gravado com sucesso!");
   });
 });
