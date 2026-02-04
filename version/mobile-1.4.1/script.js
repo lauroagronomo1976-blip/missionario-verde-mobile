@@ -208,13 +208,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ===============================
-  // EXIBIR / OCULTAR
-  // ===============================
-  btnExibir.addEventListener("click", () => {
-    formularioVisivel ? esconderFormulario() : mostrarFormulario();
+    // ===============================
+// EXIBIR / OCULTAR
+// ===============================
+btnExibir.addEventListener("click", () => {
+  if (formularioVisivel) {
+    esconderFormulario();
+  } else {
+    mostrarFormulario();
+
+    // garante que a lista apareça sempre junto
+    listaRegistros.style.display = "block";
     renderizarRegistros();
-  });
+  }
+});
+  
 // ===============================
 // LISTAR TODOS OS PONTOS DA MISSÃO
 // ===============================
