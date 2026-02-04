@@ -215,7 +215,41 @@ document.addEventListener("DOMContentLoaded", () => {
     formularioVisivel ? esconderFormulario() : mostrarFormulario();
     renderizarRegistros();
   });
+// ===============================
+// LISTAR TODOS OS PONTOS DA MISSÃO
+// ===============================
+function renderizarPontosSalvos() {
+  const missao = carregarMissao();
 
+  listaRegistros.innerHTML = "";
+
+  if (!missao.pontos.length) {
+    listaRegistros.innerHTML = "<p>Nenhum ponto gravado.</p>";
+    return;
+  }
+
+  missao.pontos.forEach((ponto, index) => {
+    const item = document.createElement("div");
+    item.style.borderBottom = "1px solid #ccc";
+    item.style.padding = "8px";
+    item.style.cursor = "pointer";
+
+    item.innerHTML = `
+      <strong>📍 Ponto ${index + 1}</strong><br>
+      ⏱ ${ponto.tempoMin} min<br>
+      📋 ${ponto.registros.length} registros
+    `;
+
+    item.addEventListener("click", () => {
+      registrosDoPontoAtual = [...ponto.registros];
+      indiceEdicao = null;
+      mostrarFormulario();
+      renderizarRegistros();
+    });
+
+    listaRegistros.appendChild(item);
+  });
+}
   // ===============================
   // GRAVAR PONTO
   // ===============================
