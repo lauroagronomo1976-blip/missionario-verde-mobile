@@ -110,9 +110,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // MARCAR PONTO
   // ===============================
   btnMarcar.addEventListener("click", () => {
-    modoCriarPonto = true;
-    map.locate({ enableHighAccuracy: true });
+  modoCriarPonto = true;
+
+  console.log("📍 Clique em Marcar Ponto");
+
+  map.locate({
+    enableHighAccuracy: true,
+    timeout: 8000
   });
+
+  // 🛟 fallback (se não vier location)
+  setTimeout(() => {
+    if (modoCriarPonto) {
+      console.warn("⚠ GPS não respondeu, usando centro do mapa");
+      const center = map.getCenter();
+      map.fire("locationfound", { latlng: center });
+    }
+  }, 3000);
+});
 
   btnLocate.addEventListener("click", () => {
     modoCriarPonto = false;
