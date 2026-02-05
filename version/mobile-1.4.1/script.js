@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const faseSelect = document.getElementById("faseSelect");
   const quantidadeInput = document.getElementById("quantidadeInput");
 
+  registroArea.style.display = "block";
+  listaRegistros.style.display = "block";
   // ===============================
   // MAPA
   // ===============================
