@@ -106,6 +106,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderizarRegistros();
   });
+function renderizarListaPontos() {
+  const missao = carregarMissao();
+  listaRegistros.innerHTML = "";
+
+  if (!missao.pontos.length) {
+    listaRegistros.innerHTML = "<p>Nenhum ponto registrado.</p>";
+    return;
+  }
+
+  missao.pontos.forEach((ponto, index) => {
+    const div = document.createElement("div");
+    div.className = "registro-item";
+    div.style.cursor = "pointer";
+
+    div.innerHTML = `
+      <strong>📍 Ponto ${index + 1}</strong><br>
+      📋 ${ponto.registros.length} registros<br>
+      ⏱ ${ponto.tempoMin} min
+    `;
+
+    div.addEventListener("click", () => {
+      registrosDoPontoAtual = [...ponto.registros];
+      indiceEdicao = null;
+      renderizarRegistros();
+    });
+
+    listaRegistros.appendChild(div);
+  });
+}
 
   // ===============================
   // ADICIONAR / EDITAR REGISTRO
@@ -200,34 +229,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // GRAVAR PONTO
   // ===============================
   btnGravar.addEventListener("click", () => {
-    if (!pontoAtual) {
-      alert("Nenhum ponto marcado");
-      return;
-    }
+  if (!pontoAtual) {
+    alert("Nenhum ponto marcado");
+    return;
+  }
 
-    const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
-    const missao = carregarMissao();
+  const tempoMin = Math.round((new Date() - inicioPonto) / 60000);
+  const missao = carregarMissao();
 
-    missao.pontos.push({
-      lat: pontoAtual.getLatLng().lat,
-      lng: pontoAtual.getLatLng().lng,
-      tempoMin,
-      registros: [...registrosDoPontoAtual]
-    });
-
-    salvarMissao(missao);
-
-    pontoAtual.bindPopup(
-      `📍 Ponto gravado<br>
-       📋 ${registrosDoPontoAtual.length} registros<br>
-       ⏱ ${tempoMin} min`
-    ).openPopup();
-
-    pontoAtual = null;
-    registrosDoPontoAtual = [];
-    listaRegistros.innerHTML = "<p>Ponto finalizado.</p>";
-
-    alert("Ponto gravado com sucesso!");
+  missao.pontos.push({
+    lat: pontoAtual.getLatLng().lat,
+    lng: pontoAtual.getLatLng().lng,
+    tempoMin,
+    registros: [...registrosDoPontoAtual]
   });
 
+  salvarMissao(missao);
+
+  pontoAtual.bindPopup(
+    `📍 Ponto gravado<br>
+     📋 ${registrosDoPontoAtual.length} registros<br>
+     ⏱ ${tempoMin} min`
+  ).openPopup();
+
+  pontoAtual = null;
+  registrosDoPontoAtual = [];
+  indiceEdicao = null;
+
+  renderizarListaPontos(); // 👈 AQUI ESTÁ A VIRADA DE CHAVE
+
+  alert("Ponto gravado com sucesso!");
 });
