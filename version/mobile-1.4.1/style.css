@@ -268,3 +268,30 @@ input {
 .field.half {
   flex: 1;
 }
+
+/* ===============================
+   CORREÇÃO DEFINITIVA – REGISTRO
+   =============================== */
+
+#registroIndividuos,
+#listaRegistros {
+  display: block !important;
+  position: relative !important;
+  z-index: 10000 !important;
+  background: #ffffff !important;
+  padding: 10px;
+  margin: 10px;
+}
+
+/* garante que o mapa não sobreponha */
+#map {
+  position: relative;
+  z-index: 1;
+}
+
+/* evita que containers escondam conteúdo */
+body, main, .container {
+  overflow: visible !important;
+}
+
+
