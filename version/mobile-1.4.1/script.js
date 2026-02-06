@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // MAPA
   // ===============================
   const map = L.map("map").setView([-15.78, -47.93], 5);
+  setTimeout(() => {
+  map.invalidateSize();
+}, 300);
 
   const camadaRua = L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
