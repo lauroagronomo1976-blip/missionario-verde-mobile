@@ -267,4 +267,5 @@ setTimeout(() => {
 }, 200);
 
     alert("Ponto gravado com sucesso!");
+  });
 });
