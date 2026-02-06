@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderizarListaPontos() {
   const missao = carregarMissao();
   listaRegistros.innerHTML = "";
-
   if (!missao.pontos.length) {
     listaRegistros.innerHTML = "<p>Nenhum ponto registrado.</p>";
     return;
@@ -233,6 +232,9 @@ function renderizarListaPontos() {
   // ===============================
   btnGravar.addEventListener("click", () => {
   if (!pontoAtual) {
+    setTimeout(() => {
+  map.invalidateSize();
+}, 200);
     alert("Nenhum ponto marcado");
     return;
   }
@@ -260,6 +262,9 @@ function renderizarListaPontos() {
   indiceEdicao = null;
 
   renderizarListaPontos(); // 👈 AQUI ESTÁ A VIRADA DE CHAVE
+setTimeout(() => {
+  map.invalidateSize();
+}, 200);
 
-  alert("Ponto gravado com sucesso!");
+    alert("Ponto gravado com sucesso!");
 });
