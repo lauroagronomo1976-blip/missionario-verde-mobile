@@ -104,8 +104,14 @@ document.addEventListener("DOMContentLoaded", () => {
     pontoAtual.bindPopup("📍 Ponto em registro").openPopup();
 
     inicioPonto = new Date();
-    registrosDoPontoAtual = [];
-    indiceEdicao = null;
+    pontoAtual = null;
+inicioPonto = null;
+registrosDoPontoAtual = [];
+indiceEdicao = null;
+
+limparFormulario();
+renderizarRegistros();     // volta a mostrar "Sem registros no ponto"
+renderizarListaPontos();  // atualiza lista de pontos gravados
 
     renderizarRegistros();
   });
