@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Registro de Missão</title>
+  <title>Registro – Mapa</title>
 
   <link
     rel="stylesheet"
@@ -15,28 +15,31 @@
       height: 100%;
     }
 
-    #map {
-      height: calc(100vh - 50px);
-    }
-
     #barra {
       height: 50px;
+      background: #1e1e1e;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #1e1e1e;
+      gap: 10px;
     }
 
     button {
-      padding: 10px 16px;
+      padding: 8px 14px;
       font-size: 14px;
+      cursor: pointer;
+    }
+
+    #map {
+      height: calc(100vh - 50px);
     }
   </style>
 </head>
 <body>
 
   <div id="barra">
-    <button id="btnMarcarPonto">📍 Marcar ponto</button>
+    <button id="btnMarcar">📍 Marcar ponto</button>
+    <button id="btnLocate">🎯 Localizar</button>
   </div>
 
   <div id="map"></div>
@@ -45,4 +48,3 @@
   <script src="registro-mapa.js"></script>
 </body>
 </html>
-
