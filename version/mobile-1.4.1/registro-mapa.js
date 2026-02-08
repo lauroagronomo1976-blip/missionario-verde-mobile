@@ -41,6 +41,15 @@ const btnMarcar = document.getElementById("btnMarcar");
 const btnLocate = document.getElementById("btnLocate");
 const btnLayers = document.getElementById("btnLayers");
 
+btnMarcarPonto.addEventListener("click", () => {
+  if (modoCriarPonto) return;
+
+  modoCriarPonto = true;
+  map.locate({ enableHighAccuracy: true });
+
+  console.log("📍 Modo marcar ponto ATIVO");
+});
+
 // ===============================
 // MARCAR PONTO
 // ===============================
@@ -97,4 +106,19 @@ map.on("locationfound", (e) => {
 // ===============================
 map.on("locationerror", () => {
   alert("Não foi possível obter localização");
+});
+
+map.on("locationfound", (e) => {
+  if (!modoCriarPonto) return;
+
+  modoCriarPonto = false;
+
+  map.setView(e.latlng, 17);
+
+  L.marker(e.latlng)
+    .addTo(map)
+    .bindPopup("📍 Ponto marcado")
+    .openPopup();
+
+  console.log("✅ Ponto criado com sucesso");
 });
