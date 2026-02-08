@@ -28,6 +28,7 @@ let marcadorAtual = null;
 // ===============================
 const btnMarcar = document.getElementById("btnMarcar");
 const btnLocate = document.getElementById("btnLocate");
+const btnLayers = document.getElementById("btnLayers");
 
 // ===============================
 // MARCAR PONTO
@@ -41,6 +42,17 @@ btnMarcar.addEventListener("click", () => {
 // ===============================
 btnLocate.addEventListener("click", () => {
   map.locate({ enableHighAccuracy: true });
+});
+
+btnLayers.addEventListener("click", () => {
+  if (usandoSatelite) {
+    map.removeLayer(camadaSatelite);
+    camadaRua.addTo(map);
+  } else {
+    map.removeLayer(camadaRua);
+    camadaSatelite.addTo(map);
+  }
+  usandoSatelite = !usandoSatelite;
 });
 
 // ===============================
